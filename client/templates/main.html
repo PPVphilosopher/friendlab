@@ -1,0 +1,288 @@
+<html>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+	
+	<script>
+		$(document).ready(function(){
+
+			$id = 1
+			$pic = 1
+			$top = [180,200,220,180]
+
+
+			$.get('/friendlab/'+$id+'/status').complete(function(e){
+				var q = JSON.parse(e.responseText)
+				var time = new Date().getTime()
+				var diff = Math.floor((time-parseInt(q.edit))/900000)
+				if(q.sleep==0){
+					q.energy = parseInt(q.energy,10)-diff
+					if(q.energy<0)q.energy=0
+					q.hungry = parseInt(q.hungry,10)-diff
+					if(q.hungry<0)q.hungry=0
+					q.clean = parseInt(q.clean,10)-diff
+					if(q.clean<0)q.clean=0
+				}else{
+					q.energy = parseInt(q.energy,10)+Math.floor((time-parseInt(q.edit,10))/12000)
+					if (q.energy>100)q.energy=100
+				}
+				q.edit = time
+				post(q)
+				update(q)
+			})
+			$('#ctl').css({'margin-top':$top[$pic]+'px'})
+			$('#ctl').html('<img src="images/images/b_0'+($pic+1)+'.png" style="width:300px;">')
+
+			var int1 = setInterval(decrease, 900000);
+			var int2 = setInterval(sleepmode, 6000);
+
+			function sleepmode(){
+				$.get('/friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.sleep==1){
+						$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'150%','background-position':'-80px -100px'})
+						$('#ctl').css({'margin-top':$top[$pic]-60})
+						$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'150%','background-position':'-80px -80px'})
+						if(q.energy<100)q.energy = parseInt(q.energy,10)+1;
+						q.edit = new Date().getTime();
+						update(q)
+						post(q)
+					}
+				})
+			}
+
+			function decrease() {
+			 	$.get('/friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.sleep==0){
+						$('#bg').css({'background-image':''})
+						if(q.energy>0)q.energy = parseInt(q.energy,10)-1
+						if(q.hungry>0)q.hungry = parseInt(q.hungry,10)-1
+						if(q.clean>0)q.clean = parseInt(q.clean,10)-1
+						q.edit = new Date().getTime()
+						update(q)
+						post(q)
+					}
+				})
+			}
+
+			$('#feed').click(function(){
+				$.get('/friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.gold>=20 && q.clean>5){
+						$('#content').css({'background-image':'url(bg/kitchen01.jpg)','background-size':'cover','background-position':'bottom'})
+						$('#bg').css({'background-image':'url(bg/kitchen02.png)','background-size':'cover','background-position':'0px -30px'})
+						$('#ctl').css({'margin-top':$top[$pic]-75})
+						q.gold = parseInt(q.gold,10)-20
+						q.hungry = parseInt(q.hungry,10)+20+Math.floor(Math.random()*6)
+						if(q.hungry>100)q.hungry=100
+						q.clean = parseInt(q.clean,10)-5
+						q.sleep = 0
+						post(q)
+					}
+				})
+			})
+
+			$('#sleep').click(function(){
+				$.get('/friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.energy<=50&&q.sleep==0){
+						$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'cover','background-position':'bottom'})
+						$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'cover','background-position':'0px -60px'})
+						$('#ctl').css({'margin-top':$top[$pic]})
+						q.sleep = 1
+						post(q)
+					}
+				})
+			})
+
+			$('#clean').click(function(){
+				$.get('/friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.hungry>5){
+						$('#content').css({'background-image':'url(bg/bath01.jpg)','background-size':'cover','background-position':'bottom'})
+						$('#bg').css({'background-image':'url(bg/bath02.png)','background-size':'cover','background-position':'0px -30px'})
+						$('#ctl').css({'margin-top':$top[$pic]-35})
+						q.clean = parseInt(q.clean,10)+20+Math.floor(Math.random()*31)
+						if(q.clean>100)q.clean=100
+						q.hungry = parseInt(q.hungry,10)-5
+						q.sleep = 0
+						post(q)
+					}
+				})
+			})
+
+			$('#minigame').click(function(){
+				$.get('http://localhost/friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.energy>5 && q.clean>5 &&q.hungry>5){
+						//$('#bg1').css({'background-image':'url(bg/lab01.jpg)','background-size':'cover','background-position':'bottom'})
+						q.energy = parseInt(q.energy,10)-5
+						q.clean = parseInt(q.clean,10)-5
+						q.hungry = parseInt(q.hungry,10)-5
+						q.gold = parseInt(q.gold,10)+Math.floor(Math.random()*51)
+						q.sleep = 0;
+						post(q)
+					}
+				})
+			})
+
+			function update(q){
+				var sl = (q.sleep==0)?'false':'true'
+				var hgc = (q.hungry>50)?'#66cc33':(q.hungry>20)?'#ffcc00':'#ff3300'
+				var enc = (q.energy>50)?'#66cc33':(q.energy>20)?'#ffcc00':'#ff3300'
+				var clc = (q.clean>50)?'#66cc33':(q.clean>20)?'#ffcc00':'#ff3300'
+				$('#hg').css({'background-color':hgc,'width':parseInt(q.hungry,10)*(0.9)+'%',})
+				$('#en').css({'background-color':enc,'width':parseInt(q.energy,10)*(0.9)+'%',})
+				$('#cl').css({'background-color':clc,'width':parseInt(q.clean,10)*(0.9)+'%',})
+				$('#gl').html('<img src="images/gold.png" style="height: 30px;">'+q.gold)
+				var pic = (q.sleep==1)?'sleep':(q.hungry>50&&q.energy>50&&q.clean>50)?'smile':(q.hungry<21||q.energy<21||q.clean<21)?'angry':'normal'
+				$('#mood').html('<img src="images/'+pic+'.png" style="height: 38;">')
+			}
+
+			function post(q){
+				var time = new Date().getTime();
+				$.post('/friendlab/'+$id+'/post/'+q.energy+'/'+q.hungry+'/'+q.clean+'/'+time+'/'+q.sleep+'/'+q.gold)
+				update(q)
+			}
+
+		})
+	</script>
+
+
+<!--.....html code........................................................................................-->  	
+
+
+	<head> 
+		<title>
+			Friend Lab	
+		</title>
+	</head>
+	<body>
+		<div data-theme="a" class="my-page" style='position:relative;z-index:5' >
+			<div data-role="header">
+				<div  class="ui-btn-right">
+					<a id="minigame" href="#"><img src="images/mini.png" style="width:36px"></a>
+				</div>
+				<span class="ui-title">
+					Main
+				</span>
+				<div  class="ui-btn-left">
+					<img src="images/reset.png" style="width:32px">
+				</div>
+			</div>
+		</div>
+<!--.Status & Mood........................................................................................-->
+		<div id="content" style='background-image:url(bg/lab01.jpg);background-size:cover;background-position:bottom;width:320px;height:524px;position:relative;z-index:0'>
+	<!-- ..... status bar layer ......................................................................... -->
+			<div id="stl" style='position:absolute;z-index:5'>
+				<table border='0' width="100%" style="width: 20em;" >
+					<col width="10%">
+		  			<col width="30%">
+		  			<col width="30%">
+		  			<col width="30%">
+		   			<tr>
+	   					<td>
+	   						<div id='mood'>
+	   							<img src="images/normal.png" style="height: 38;">
+	   						</div>
+	   					</td>
+	   					<td bgcolor='#000' style="-webkit-border-radius:15px;-moz-border-radius:15px; border-radius: 15px;">
+	   						<div id='hg'style="
+								background-color:#66cc33;
+					 			height: 2em;
+					 			width: 90%; 
+					 			color:#FFF; 
+					 			text-align:center;
+								-webkit-border-radius: 10px;
+								-moz-border-radius: 10px;
+						 		border-radius: 10px;
+						  		margin: 0 5%;
+						  		vertical-align: middle;
+								line-height: 35px;">
+			   					Hungry
+				   			</div>
+				   		</td>
+				   		<td bgcolor='#000' style="-webkit-border-radius: 15px;-moz-border-radius: 15px; border-radius: 15px;">
+				   			<div id='en' style="
+								background-color:#66cc33;
+					 			height: 2em;
+					 			width: 90%; 
+					 			color:#FFF; 
+					 			text-align:center;
+								-webkit-border-radius: 10px;
+								-moz-border-radius: 10px;
+						 		border-radius: 10px;
+						  		margin: 0 5%;
+						  		vertical-align: middle;
+								line-height: 35px;">
+								Energy
+							</div>
+						</td>
+				   		<td bgcolor='#000'style="-webkit-border-radius: 15px;-moz-border-radius: 15px; border-radius: 15px;">
+				   			<div id='cl' style="
+								background-color:#66cc33;
+					 			height: 2em;
+					 			width: 90%; 
+					 			color:#FFF; 
+					 			text-align:center;
+								-webkit-border-radius: 10px;
+								-moz-border-radius: 10px;
+						 		border-radius: 10px;
+						  		margin: 0 5%;
+						  		vertical-align: middle;
+								line-height: 35px;">
+								Clean
+	   						</div>
+	   					</td>
+					</tr>
+				</table>
+				<div>
+					<table width="100%">
+						<tr> 
+							<td>
+								<div id='gl' style='vertical-align:center'>
+									<img src="images/gold.png" style="height: 30px;">0
+								</div>
+							</td> 
+							<td align="right">
+								<div>
+									<img src="images/sharebutton.png" style="height: 25px;">
+								</div>
+							</td>
+						</tr>
+					</table>		
+				</div>
+			</div>
+	<!-- ..... button layer ............................................................................. -->
+			<div id="btl" style='position:absolute;z-index:4;margin-top:460;margin-left:20'>
+				<table>
+					<tr>
+						<td>
+							<a id="feed" href="#">
+								<img src="images/Buttonfeed.png" style="height: 50px">
+							</a>
+						</td>
+						<td>
+							<a id="sleep" href="#">
+								<img src="images/Buttonsleep.png" style="height: 50px">
+							</a>
+						</td>
+						<td>
+							<a id="clean" href="#">
+								<img src="images/Buttonclean.png" style="height: 50px">
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+	<!-- ..... front background layer ................................................................... -->
+			<div id="fnl" style='position:absolute;z-index:3'>
+				<div id="bg" style='width:320px;height:524px'></div>
+			</div>
+	<!-- ..... charactor layer .......................................................................... -->
+			<div id="ctl" style='position:absolute;z-index:2;left:50%;margin-left:-150px'>
+			</div>
+		</div>		
+	</body>		
+</html>
