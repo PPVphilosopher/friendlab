@@ -1,3 +1,4 @@
 RewriteEngine On
+RewriteRule ^(client(/|$)) - [L,NC] # ignores client folder : see http://stackoverflow.com/questions/163302/how-do-i-ignore-a-directory-in-mod-rewrite
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [QSA,L]
