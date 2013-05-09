@@ -55,6 +55,12 @@
 		$res->body(json_encode(array('success' => TRUE)));
 	});
 
+	$app->get('/friendlab/1', function() use ($app) {
+		$res = $app->response();
+		$res['Content-Type'] = 'application/json';
+		$res->body(json_encode(array('success' => TRUE)));
+	});
+
 	$app->get('/', function() use ($app) {
 		$res = $app->response();
 		$res['Content-Type'] = 'application/json';
