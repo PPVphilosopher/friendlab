@@ -11,15 +11,29 @@
 			$top = [180,200,220,180]	
 
 			$id = 1
-			$pic = 2
-			
+			$pic = 0
+
+			var int_decrease = setInterval(function(){},0)
+			var int_sleep = setInterval(function(){},0)
+			var int_return = setInterval(function(){},0)
+
 			draw_main()
+
+			function rt(){
+				var cvs = document.getElementById("canvas")
+				var cv = cvs.getContext("2d")
+
+				var img = new Image()
+				img.src = 'bg/lab01.jpg'
+				cv.drawImage(img,0,0,320,524)
+				img.src = 'images/images/b_0'+($pic+1)+'.png'
+				cv.drawImage(img,10,$top[$pic],300,300)
+			}
 
 			function draw_main(){
 				$('#mhead').html('Friendlab')
 				$('#rhead').html('<a id="minigame" href="#"><img src="images/mini.png" style="width:36px"></a>')
 				$('#lhead').html('<img src="images/reset.png" style="width:32px">')
-				//$('#content').css({"background-image":"url(bg/lab01.jpg)","background-size":"cover","background-position":"bottom"})
 				$('#stl').css({'margin-top':'0','margin-left':'0'})
 				$('#stl').html(
 					'<table border="0" width="100%" style="width: 20em;" >'+
@@ -83,15 +97,10 @@
 						'</tr>'+
 					'</table>'
 				)
-				//$('#fnl').css({'margin-top':'0','margin-left':'0'})
-				//$('#fnl').html('<div id="bg" style="width:320px;height:524px"></div>')
-				//$('#ctl').css({'margin-top':$top[$pic]+'px','margin-left':'10'})
-				//$('#ctl').html('<img src="images/images/b_0'+($pic+1)+'.png" style="width:300px;">')
 				$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
-				var cvs = document.getElementById("canvas")
-				var cv = cvs.getContext("2d")
-				var lab01 = bg/lab01.jpg
-				cv.drawImage(lab01,0,0)
+
+				rt()
+
 				init_main()
 			}
 
@@ -107,9 +116,17 @@
 						if(q.hungry<0)q.hungry=0
 						q.clean = parseInt(q.clean,10)-diff
 						if(q.clean<0)q.clean=0
-					}else if(q.sleep==0){
+
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
+
+					}else if(q.sleep==1){
 						q.energy = parseInt(q.energy,10)+Math.floor((time-parseInt(q.edit,10))/12000)
 						if (q.energy>100)q.energy=100
+
+						clearInterval(int_decrease)
+						int_sleep = setInterval(sleepmode,6000)
+
 					}else{
 
 					}
@@ -118,19 +135,25 @@
 					update(q)
 				})
 				
-				var int1 = setInterval(decrease, 900000);
-				var int2 = setInterval(sleepmode, 6000);
 			}
 
 			function sleepmode(){
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.sleep==1){
-						//$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'150%','background-position':'-80px -100px'})
-						//$('#ctl').css({'margin-top':$top[$pic]-60})
-						//$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'150%','background-position':'-80px -80px'})
-						if(q.energy<100)q.energy = parseInt(q.energy,10)+1;
-						q.edit = new Date().getTime();
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
+
+						var img = new Image()
+						img.src = 'bg/bed01.jpg'
+						cv.drawImage(img,-80,-131,480,786)
+						img.src = 'images/images/b_0'+($pic+1)+'.png'
+						cv.drawImage(img,10,$top[$pic]-120,300,300)
+						img.src = 'bg/bed02.png'
+						cv.drawImage(img,-80,-81,480,786)
+
+						if(q.energy<100)q.energy = parseInt(q.energy,10)+1
+						q.edit = new Date().getTime()
 						update(q)
 						post(q)
 					}
@@ -152,7 +175,10 @@
 			}
 
 			function clear(){
-				$('#content').css({'background-image':'url(bg/lab01.jpg)','background-size':'cover','background-position':'bottom'})
+				clearInterval(int_decrease)
+				clearInterval(int_sleep)
+				clearInterval(int_return)
+				$('#content').css({'background-image':'','background-size':'cover','background-position':'bottom'})
 				$('#stl').css({'margin-top':'0','margin-left':'0'})
 				$('#stl').html()
 				$('#btl').css({'margin-top':'0','margin-left':'0'})
@@ -166,18 +192,31 @@
 			$('#share').click(function(){
 			    html2canvas(document.body, {
 				    onrendered: function(canvas) {
-				    	window.open(canvas.toDataURL());
+				    	window.open(canvas.toDataURL())
 				    }
-			    });
+			    })
 			})
 
 			$('#feed').click(function(){
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.gold>=20 && q.clean>5){
-						//$('#content').css({'background-image':'url(bg/kitchen01.jpg)','background-size':'cover','background-position':'bottom'})
-						//$('#bg').css({'background-image':'url(bg/kitchen02.png)','background-size':'cover','background-position':'0px -30px'})
-						//$('#ctl').css({'margin-top':$top[$pic]-75})
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
+						clearInterval(int_return)
+						int_return = setInterval(rt,10000)
+
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
+
+						var img = new Image()
+						img.src = 'bg/kitchen01.jpg'
+						cv.drawImage(img,0,0,320,524)
+						img.src = 'images/images/b_0'+($pic+1)+'.png'
+						cv.drawImage(img,10,$top[$pic]-60,300,300)
+						img.src = 'bg/kitchen02.png'
+						cv.drawImage(img,0,0,320,524)
+
 						q.gold = parseInt(q.gold,10)-20
 						q.hungry = parseInt(q.hungry,10)+20+Math.floor(Math.random()*6)
 						if(q.hungry>100)q.hungry=100
@@ -192,11 +231,24 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.energy<=50&&q.sleep==0){
-						//$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'cover','background-position':'bottom'})
-						//$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'cover','background-position':'0px -60px'})
-						//$('#ctl').css({'margin-top':$top[$pic]})
+						clearInterval(int_return)
+
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
+
+						var img = new Image()
+						img.src = 'bg/bed01.jpg'
+						cv.drawImage(img,0,0,320,524)
+						img.src = 'images/images/b_0'+($pic+1)+'.png'
+						cv.drawImage(img,10,$top[$pic],300,300)
+						img.src = 'bg/bed02.png'
+						cv.drawImage(img,0,-60,320,524)
+
 						q.sleep = 1
 						post(q)
+
+						clearInterval(int_decrease)
+						int_sleep = setInterval(sleepmode,6000)
 					}
 				})
 			})
@@ -205,9 +257,22 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.hungry>5){
-						//$('#content').css({'background-image':'url(bg/bath01.jpg)','background-size':'cover','background-position':'bottom'})
-						//$('#bg').css({'background-image':'url(bg/bath02.png)','background-size':'cover','background-position':'0px -30px'})
-						//$('#ctl').css({'margin-top':$top[$pic]-35})
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
+						clearInterval(int_return)
+						int_return = setInterval(rt,10000)
+
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
+
+						var img = new Image()
+						img.src = 'bg/bath01.jpg'
+						cv.drawImage(img,0,0,320,524)
+						img.src = 'images/images/b_0'+($pic+1)+'.png'
+						cv.drawImage(img,10,$top[$pic]-60,300,300)
+						img.src = 'bg/bath02.png'
+						cv.drawImage(img,0,0,320,524)
+
 						q.clean = parseInt(q.clean,10)+20+Math.floor(Math.random()*31)
 						if(q.clean>100)q.clean=100
 						q.hungry = parseInt(q.hungry,10)-5
@@ -221,14 +286,15 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.energy>5 && q.clean>5 &&q.hungry>5){
-						//$('#content').css({'background-image':'url(bg/lab01.jpg)','background-size':'cover','background-position':'bottom'})
-						//$('#bg').css({'background-image':'url()','background-size':'cover','background-position':'bottom'})
-						//$('#ctl').css({'margin-top':$top[$pic]})
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
+						rt()
+
 						q.energy = parseInt(q.energy,10)-5
 						q.clean = parseInt(q.clean,10)-5
 						q.hungry = parseInt(q.hungry,10)-5
 						q.gold = parseInt(q.gold,10)+Math.floor(Math.random()*51)
-						q.sleep = 0;
+						q.sleep = 0
 						post(q)
 					}
 				})
