@@ -1,0 +1,103 @@
+</html><html>
+<link rel="stylesheet" href="jquery.mobile-1.3.1.min.css" />
+<script src="jquery-1.9.1.js"></script>
+<script src="jquery.mobile-1.3.1.min.js"></script>
+
+<head>
+	<style type="text/css">
+		
+		div.bg1{background-image:url(bg/minigameBG.jpg);
+			background-size:contain;
+			height: 493px;
+			z-index: 1;
+			position: absolute;										
+			padding-left: 100%}
+		div.bg2{background-image:url(bg/minigameBG02.png)
+			;background-size:contain;
+			height: 493px;
+			z-index: 2;
+			position: absolute;										
+			padding-left: 100%}
+		div.mfp1{background-image:url(images/mfp1.png);
+			z-index: 3;
+			position: absolute;										
+			height: 330px;
+			width: 285px;
+			background-size: cover;
+			margin-top: 40px;
+			margin-left: 5px;}
+		div.mfp2{background-image:url(images/mfp2.png);
+			z-index: 3;
+			position: absolute;										
+			height: 330px;
+			width: 285px;
+			background-size: cover;
+			margin-top: 40px;
+			margin-left: 5px;}
+</style>
+<!--......................................................................................................-->  	 
+		<title>
+			Friend Lab	
+		</title>
+	</head>
+		<body>
+		
+			<div data-theme="a" class="my-page" stlye="width:45px;">
+			
+					<div data-role="header">
+    						<span class="ui-title" >MonsterFriend</span>
+    				</div>
+    		</div>
+			
+<!--background..............................................................................................-->	
+	<div>
+		<div data-role="content" class="bg1" ></div>
+		<div data-role="content" class="bg2" ></div>
+
+	
+
+<!-- swipe ............................................................................................-->
+		<div class="mfp1" data-role="content" ></div>
+		<script>
+$(document).ready(function(){
+
+	$pic=1;
+	$(function(){
+	    $('div.mfp1').on('swipeleft',swipeHandler);
+	    function swipeHandler(event){
+		    if($pic<2){
+		    	$(event.target).removeClass('mfp1 mfp2 ');
+		    	$(event.target).addClass( 'mfp'+($pic+1) );
+		    	$pic=$pic+1;
+		    }	
+		}
+	});
+
+	$(function(){
+	    $('div.mfp1').on('swiperight',swipeHandler);
+    	function swipeHandler(event){
+    		if($pic>1){
+	    		$(event.target).removeClass('mfp1 mfp2 ');
+	    		$(event.target).addClass( 'mfp'+($pic-1) );
+	    		$pic=$pic-1;
+    		}
+    	}
+	});	
+});
+
+
+
+	
+
+</script>
+
+		<div><center>
+				<a href="#">
+					<img src="images/buttonplay.png" 
+						style="height: 53px; margin:430px 0 0 -83px; z-index: 4; position: absolute;">
+				</a>
+			</center></div>
+	
+	</div></body>
+	
+</html>
