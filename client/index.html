@@ -1,21 +1,25 @@
 <html>
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+	<script src="jquery-1.9.1.js"></script>
+	<script src="html2canvas.js"></script>
+	<script src="jquery.mobile-1.3.1.min.js"></script>
 
 	<script>
 		$(document).ready(function(){
 
 			$add = 'http://localhost/'
+			$top = [180,200,220,180]	
+
 			$id = 1
 			$pic = 2
-			$top = [180,200,220,180]	
+			
 			draw_main()
 
 			function draw_main(){
 				$('#mhead').html('Friendlab')
 				$('#rhead').html('<a id="minigame" href="#"><img src="images/mini.png" style="width:36px"></a>')
 				$('#lhead').html('<img src="images/reset.png" style="width:32px">')
+				//$('#content').css({"background-image":"url(bg/lab01.jpg)","background-size":"cover","background-position":"bottom"})
 				$('#stl').css({'margin-top':'0','margin-left':'0'})
 				$('#stl').html(
 					'<table border="0" width="100%" style="width: 20em;" >'+
@@ -56,7 +60,7 @@
 								'</td>'+
 								'<td align="right">'+
 									'<div>'+
-										'<img src="images/sharebutton.png" style="height: 25px;">'+
+										'<a id="share" href="#"><img src="images/sharebutton.png" style="height: 25px;"></a>'+
 									'</div>'+
 								'</td>'+
 							'</tr>'+
@@ -79,9 +83,15 @@
 						'</tr>'+
 					'</table>'
 				)
-				$('#fnl').css({'margin-top':'0','margin-left':'0'})
-				$('#fnl').html('<div id="bg" style="width:320px;height:524px"></div>')
-				$('#ctl').css({'margin-top':'0','margin-left':'10'})
+				//$('#fnl').css({'margin-top':'0','margin-left':'0'})
+				//$('#fnl').html('<div id="bg" style="width:320px;height:524px"></div>')
+				//$('#ctl').css({'margin-top':$top[$pic]+'px','margin-left':'10'})
+				//$('#ctl').html('<img src="images/images/b_0'+($pic+1)+'.png" style="width:300px;">')
+				$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+				var cvs = document.getElementById("canvas")
+				var cv = cvs.getContext("2d")
+				var lab01 = bg/lab01.jpg
+				cv.drawImage(lab01,0,0)
 				init_main()
 			}
 
@@ -107,9 +117,7 @@
 					post(q)
 					update(q)
 				})
-				$('#ctl').css({'margin-top':$top[$pic]+'px'})
-				$('#ctl').html('<img src="images/images/b_0'+($pic+1)+'.png" style="width:300px;">')
-
+				
 				var int1 = setInterval(decrease, 900000);
 				var int2 = setInterval(sleepmode, 6000);
 			}
@@ -118,9 +126,9 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.sleep==1){
-						$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'150%','background-position':'-80px -100px'})
-						$('#ctl').css({'margin-top':$top[$pic]-60})
-						$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'150%','background-position':'-80px -80px'})
+						//$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'150%','background-position':'-80px -100px'})
+						//$('#ctl').css({'margin-top':$top[$pic]-60})
+						//$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'150%','background-position':'-80px -80px'})
 						if(q.energy<100)q.energy = parseInt(q.energy,10)+1;
 						q.edit = new Date().getTime();
 						update(q)
@@ -133,7 +141,6 @@
 			 	$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.sleep==0){
-						$('#bg').css({'background-image':''})
 						if(q.energy>0)q.energy = parseInt(q.energy,10)-1
 						if(q.hungry>0)q.hungry = parseInt(q.hungry,10)-1
 						if(q.clean>0)q.clean = parseInt(q.clean,10)-1
@@ -156,13 +163,21 @@
 				$('#ctl').html()
 			}
 
+			$('#share').click(function(){
+			    html2canvas(document.body, {
+				    onrendered: function(canvas) {
+				    	window.open(canvas.toDataURL());
+				    }
+			    });
+			})
+
 			$('#feed').click(function(){
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.gold>=20 && q.clean>5){
-						$('#content').css({'background-image':'url(bg/kitchen01.jpg)','background-size':'cover','background-position':'bottom'})
-						$('#bg').css({'background-image':'url(bg/kitchen02.png)','background-size':'cover','background-position':'0px -30px'})
-						$('#ctl').css({'margin-top':$top[$pic]-75})
+						//$('#content').css({'background-image':'url(bg/kitchen01.jpg)','background-size':'cover','background-position':'bottom'})
+						//$('#bg').css({'background-image':'url(bg/kitchen02.png)','background-size':'cover','background-position':'0px -30px'})
+						//$('#ctl').css({'margin-top':$top[$pic]-75})
 						q.gold = parseInt(q.gold,10)-20
 						q.hungry = parseInt(q.hungry,10)+20+Math.floor(Math.random()*6)
 						if(q.hungry>100)q.hungry=100
@@ -177,9 +192,9 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.energy<=50&&q.sleep==0){
-						$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'cover','background-position':'bottom'})
-						$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'cover','background-position':'0px -60px'})
-						$('#ctl').css({'margin-top':$top[$pic]})
+						//$('#content').css({'background-image':'url(bg/bed01.jpg)','background-size':'cover','background-position':'bottom'})
+						//$('#bg').css({'background-image':'url(bg/bed02.png)','background-size':'cover','background-position':'0px -60px'})
+						//$('#ctl').css({'margin-top':$top[$pic]})
 						q.sleep = 1
 						post(q)
 					}
@@ -190,9 +205,9 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.hungry>5){
-						$('#content').css({'background-image':'url(bg/bath01.jpg)','background-size':'cover','background-position':'bottom'})
-						$('#bg').css({'background-image':'url(bg/bath02.png)','background-size':'cover','background-position':'0px -30px'})
-						$('#ctl').css({'margin-top':$top[$pic]-35})
+						//$('#content').css({'background-image':'url(bg/bath01.jpg)','background-size':'cover','background-position':'bottom'})
+						//$('#bg').css({'background-image':'url(bg/bath02.png)','background-size':'cover','background-position':'0px -30px'})
+						//$('#ctl').css({'margin-top':$top[$pic]-35})
 						q.clean = parseInt(q.clean,10)+20+Math.floor(Math.random()*31)
 						if(q.clean>100)q.clean=100
 						q.hungry = parseInt(q.hungry,10)-5
@@ -206,9 +221,9 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.energy>5 && q.clean>5 &&q.hungry>5){
-						$('#content').css({'background-image':'url(bg/lab01.jpg)','background-size':'cover','background-position':'bottom'})
-						$('#bg').css({'background-image':'url()','background-size':'cover','background-position':'bottom'})
-						$('#ctl').css({'margin-top':$top[$pic]})
+						//$('#content').css({'background-image':'url(bg/lab01.jpg)','background-size':'cover','background-position':'bottom'})
+						//$('#bg').css({'background-image':'url()','background-size':'cover','background-position':'bottom'})
+						//$('#ctl').css({'margin-top':$top[$pic]})
 						q.energy = parseInt(q.energy,10)-5
 						q.clean = parseInt(q.clean,10)-5
 						q.hungry = parseInt(q.hungry,10)-5
@@ -260,15 +275,15 @@
 			</div>
 		</div>
 <!--.Status & Mood........................................................................................-->
-		<div id="content" style='background-image:url(bg/lab01.jpg);background-size:cover;background-position:bottom;width:320px;height:524px;position:relative;z-index:0'>
+		<div id="content" style='position:relative;z-index:0;width:320px;height:524px;background-image:url(bg/lab1x.jpg);background-size:cover;background-position:bottom;'>
 	<!-- ..... status bar layer ......................................................................... -->
-			<div id="stl" style='position:absolute;z-index:4'></div>
+			<div id="stl" style='position:absolute;z-index:5'></div>
 	<!-- ..... button layer ............................................................................. -->
-			<div id="btl" style='position:absolute;z-index:3'></div>
+			<div id="btl" style='position:absolute;z-index:4'></div>
 	<!-- ..... front background layer ................................................................... -->
-			<div id="fnl" style='position:absolute;z-index:2'></div>
+			<div id="fnl" style='position:absolute;z-index:3'></div>
 	<!-- ..... charactor layer .......................................................................... -->
-			<div id="ctl" style='position:absolute;z-index:1'></div>
+			<div id="ctl" style='position:absolute;z-index:2'></div>
 		</div>
 	</body>
 </html>
