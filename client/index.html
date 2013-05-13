@@ -8,7 +8,7 @@
 
 
 
-<!--.....html code........................................................................................-->
+	<!--.....html code........................................................................................-->
 
 
 	<head>
@@ -19,446 +19,452 @@
 	<body>
 
 
-		<div id="fb-root">
-			<script>
+	<div id="fb-root">
+		<script>
 
 
-//..........facebook code..............................................................................
+		//..........facebook code..............................................................................
 
 
-				window.fbAsyncInit = function() {
-					FB.init({
-						appId      : '405891112842517', // App ID
-						channelUrl : 'http://localhost/friendlab', // Channel File
-						status     : true, // check login status
-						cookie     : true, // enable cookies to allow the server to access the session
-						xfbml      : true  // parse XFBML
-					});
-					// Here we subscribe to the auth.authResponseChange JavaScript Event. This event is fired
-					// for any auth related change, such as login, logout or session refresh. This means that
-					// whenever someone who was previously logged out then logs in, the correct case below 
-					// will be handled. 
-					FB.Event.subscribe('auth.authResponseChange', function(response) {
-						// Here we specify what we do with the response anytime this event occurs. 
-						if (response.status === 'connected') {
-							// The response object is returned with a status field that lets us know what the current
-							// login status of the person is. In this case, we're handling the situation where they 
-							// have logged in to the app.
-							console.log('connected');
-							testAPI();
-						} else if (response.status === 'not_authorized') {
-							// In this case, the person is logged into Facebook, but not into the app, so we call
-							// FB.login() to prompt them to do so. 
-							// In real-life usage, you wouldn't want to immediately prompt someone to login 
-							// like this, for two reasons:
-							// (1) JavaScript created popup windows are blocked by most browsers unless they 
-							// result from direct user interaction (such as a mouse click)
-							// (2) it is a bad experience to be continually prompted to login upon page load.
-							console.log('not_authorized');
-							FB.login();
-						} else {
-						// In this case, the person is not logged into Facebook, so we call the login() 
-							// function to prompt them to do so. Note that at this stage there is no indication
-							// of whether they are logged into the app. If they aren't then they'll see the Login
-							// Dialog right after they login to Facebook. 
-							// The same caveats as above apply to the FB.login() call here.
-							console.log('neither');
-							FB.login();
-						}
-					});
-				};
-				// Load the SDK Asynchronously
-				(function(d){
-					var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-					if (d.getElementById(id)) {return;}
-					js = d.createElement('script'); js.id = id; js.async = true;
-					js.src = "all.js";
-					ref.parentNode.insertBefore(js, ref);
-				}(document));
-					// Here we are just running a very simple test of the Graph API after login is successful. 
-					// This testAPI() function is only called in those cases.
-				function testAPI() {
-					FB.api('/me', function(response) {
-						console.log(response.id+' : '+response.name)
-						init()
-					});
-				}
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId : '405891112842517', // App ID
+					channelUrl : 'http://localhost/friendlab', // Channel File
+					status : true, // check login status
+					cookie : true, // enable cookies to allow the server to access the session
+					xfbml : true // parse XFBML
+				});
+				// Here we subscribe to the auth.authResponseChange JavaScript Event. This event is fired
+				// for any auth related change, such as login, logout or session refresh. This means that
+				// whenever someone who was previously logged out then logs in, the correct case below
+				// will be handled.
+				FB.Event.subscribe('auth.authResponseChange', function(response) {
+					// Here we specify what we do with the response anytime this event occurs.
+					if (response.status === 'connected') {
+						// The response object is returned with a status field that lets us know what the current
+						// login status of the person is. In this case, we're handling the situation where they
+						// have logged in to the app.
+						console.log('connected');
+						testAPI();
+					} else if (response.status === 'not_authorized') {
+						// In this case, the person is logged into Facebook, but not into the app, so we call
+						// FB.login() to prompt them to do so.
+						// In real-life usage, you wouldn't want to immediately prompt someone to login
+						// like this, for two reasons:
+						// (1) JavaScript created popup windows are blocked by most browsers unless they
+						// result from direct user interaction (such as a mouse click)
+						// (2) it is a bad experience to be continually prompted to login upon page load.
+						console.log('not_authorized');
+						FB.login();
+					} else {
+						// In this case, the person is not logged into Facebook, so we call the login()
+						// function to prompt them to do so. Note that at this stage there is no indication
+						// of whether they are logged into the app. If they aren't then they'll see the Login
+						// Dialog right after they login to Facebook.
+						// The same caveats as above apply to the FB.login() call here.
+						console.log('neither');
+						FB.login();
+					}
+				});
+			};
+			// Load the SDK Asynchronously
+			(function(d){
+				var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+				if (d.getElementById(id)) {return;}
+				js = d.createElement('script'); js.id = id; js.async = true;
+				js.src = "all.js";
+				ref.parentNode.insertBefore(js, ref);
+			}(document));
+			// Here we are just running a very simple test of the Graph API after login is successful.
+			// This testAPI() function is only called in those cases.
+			function testAPI() {
+				FB.api('/me', function(response) {
+					console.log(response.id+' : '+response.name)
+					$('#stl').html('<a href"#" onclick="init()"><img src="https://graph.facebook.com/'+response.id+'/picture?type=square" style="width:40;height:40"></a>')
+					$('#stl').css({'margin':'337 190'})
+					$('#btl').html('<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
+						'<a href"#" onclick="init()"><img src="GRAPHIC/facebookas.png" style="width:210;height:70;margin:0 55"></a>'+
+						'<a href"#" onclick="diff()"><img src="GRAPHIC/facebookdiff.png" style="width:210;height:70;margin:20 55"></a>'						
+					)
+				});
+			}
+
+			function diff(){
+				FB.logout()
+				$('#stl').css({'margin':'0 0'})
+				$('#stl').html('<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
+						'<a href"#" onclick="FB.login(function(){},{scope:\'publish_stream\'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:0 55"></a>')
+				$('#btl').html()
+			}
 
 
-				
-//..........game code.................................................................................
 
-				
+			//..........game code.................................................................................
 
-				$add = 'http://localhost/'
-				$top = [180,200,220,180]	
 
-				$id = 1
-				$pic = 0
 
-				var int_decrease = setInterval(function(){},0)
-				var int_sleep = setInterval(function(){},0)
-				var int_return = setInterval(function(){},0)
-				function init(){
-					draw_main()
-				}
+			$add = 'http://localhost/'
+			$top = [180,200,220,180]	
 
-				function draw_main(){
-					console.log("draw_main start")
-					$('#mhead').html('Friendlab')
-					$('#rhead').html('<a href="#" onclick="minigame()"><img src="images/mini.png" style="width:36px"></a>')
-					$('#lhead').html('<img src="images/reset.png" style="width:32px">')
-					$('#stl').css({'margin-top':'0','margin-left':'0'})
-					$('#stl').html(
-						'<table border="0" width="100%" style="width: 20em;" >'+
-							'<col width="10%">'+
-				  			'<col width="30%">'+
-				  			'<col width="30%">'+
-				  			'<col width="30%">'+
-				   			'<tr>'+
-			   					'<td>'+
-			   						'<div id="mood">'+
-			   							'<img src="images/normal.png" style="height: 38;">'+
-			   						'</div>'+
-			   					'</td>'+
-			   					'<td bgcolor="#000" style="-webkit-border-radius:15px;-moz-border-radius:15px; border-radius: 15px;">'+
-			   						'<div id="hg"style="background-color:#66cc33;height: 2em;width: 90%;color:#FFF;text-align:center;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;margin: 0 5%;vertical-align: middle;line-height: 35px;">'+
-					   					'Hungry'+
-						   			'</div>'+
-						   		'</td>'+
-						   		'<td bgcolor="#000" style="-webkit-border-radius: 15px;-moz-border-radius: 15px; border-radius: 15px;">'+
-						   			'<div id="en" style="background-color:#66cc33;height: 2em;width: 90%;color:#FFF;text-align:center;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;margin: 0 5%;vertical-align: middle;line-height: 35px;">'+
+			$id = 1
+			$pic = 0
+
+			var int_decrease = setInterval(function(){},0)
+			var int_sleep = setInterval(function(){},0)
+			var int_return = setInterval(function(){},0)
+			
+			function init(){
+				draw_main()
+			}
+
+			function draw_main(){
+				console.log("draw_main start")
+				$('#mhead').html('Friendlab')
+				$('#rhead').html('<a href="#" onclick="minigame()"><img src="images/mini.png" style="width:36px"></a>')
+				$('#lhead').html('<img src="images/reset.png" style="width:32px">')
+				$('#stl').css({'margin-top':'0','margin-left':'0'})
+				$('#stl').html(
+					'<table border="0" width="100%" style="width: 20em;" >'+
+						'<col width="10%">'+
+						'<col width="30%">'+
+						'<col width="30%">'+
+						'<col width="30%">'+
+						'<tr>'+
+							'<td>'+
+								'<div id="mood">'+
+									'<img src="images/normal.png" style="height: 38;">'+
+								'</div>'+
+							'</td>'+
+							'<td bgcolor="#000" style="-webkit-border-radius:15px;-moz-border-radius:15px; border-radius: 15px;">'+
+								'<div id="hg"style="background-color:#66cc33;height: 2em;width: 90%;color:#FFF;text-align:center;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;margin: 0 5%;vertical-align: middle;line-height: 35px;">'+
+										'Hungry'+
+								'</div>'+
+							'</td>'+
+							'<td bgcolor="#000" style="-webkit-border-radius: 15px;-moz-border-radius: 15px; border-radius: 15px;">'+
+								'<div id="en" style="background-color:#66cc33;height: 2em;width: 90%;color:#FFF;text-align:center;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;margin: 0 5%;vertical-align: middle;line-height: 35px;">'+
 										'Energy'+
+								'</div>'+
+							'</td>'+
+							'<td bgcolor="#000"style="-webkit-border-radius: 15px;-moz-border-radius: 15px; border-radius: 15px;">'+
+								'<div id="cl" style="background-color:#66cc33;height: 2em;width: 90%;color:#FFF;text-align:center;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;margin: 0 5%;vertical-align: middle;line-height: 35px;">'+
+									'Clean'+
+								'</div>'+
+							'</td>'+
+						'</tr>'+
+					'</table>'+
+					'<div>'+
+						'<table width="100%">'+
+							'<tr>'+
+								'<td>'+
+									'<div id="gl" style="vertical-align:center">'+
+										'<img src="images/gold.png" style="height: 30px;">0'+
 									'</div>'+
 								'</td>'+
-						   		'<td bgcolor="#000"style="-webkit-border-radius: 15px;-moz-border-radius: 15px; border-radius: 15px;">'+
-						   			'<div id="cl" style="background-color:#66cc33;height: 2em;width: 90%;color:#FFF;text-align:center;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;margin: 0 5%;vertical-align: middle;line-height: 35px;">'+
-										'Clean'+
-			   						'</div>'+
-			   					'</td>'+
+								'<td align="right">'+
+									'<div>'+
+										'<a href="#" onclick="share()"><img src="images/sharebutton.png" style="height: 25px;"></a>'+
+									'</div>'+
+								'</td>'+
 							'</tr>'+
 						'</table>'+
-						'<div>'+
-							'<table width="100%">'+
-								'<tr>'+
-									'<td>'+
-										'<div id="gl" style="vertical-align:center">'+
-											'<img src="images/gold.png" style="height: 30px;">0'+
-										'</div>'+
-									'</td>'+
-									'<td align="right">'+
-										'<div>'+
-											'<a href="#" onclick="share()"><img src="images/sharebutton.png" style="height: 25px;"></a>'+
-										'</div>'+
-									'</td>'+
-								'</tr>'+
-							'</table>'+
-						'</div>'
+					'</div>'
 					)
 					$('#btl').css({'margin-top':'460','margin-left':'20'})
 					$('#btl').html(
-						'<table>'+
-							'<tr>'+
-								'<td>'+
-									'<a href="#" onclick="feed()"><img src="images/Buttonfeed.png" style="height: 50px"></a>'+
-								'</td>'+
-								'<td>'+
-									'<a href="#" onclick="sleep()"><img src="images/Buttonsleep.png" style="height: 50px"></a>'+
-								'</td>'+
-								'<td>'+
-									'<a href="#" onclick="clean()"><img src="images/Buttonclean.png" style="height: 50px"></a>'+
-								'</td>'+
-							'</tr>'+
-						'</table>'
-					)
-					$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+					'<table>'+
+						'<tr>'+
+							'<td>'+
+								'<a href="#" onclick="feed()"><img src="images/Buttonfeed.png" style="height: 50px"></a>'+
+							'</td>'+
+							'<td>'+
+								'<a href="#" onclick="sleep()"><img src="images/Buttonsleep.png" style="height: 50px"></a>'+
+							'</td>'+
+							'<td>'+
+								'<a href="#" onclick="clean()"><img src="images/Buttonclean.png" style="height: 50px"></a>'+
+							'</td>'+
+						'</tr>'+
+					'</table>'
+				)
+				$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
 
-					rt()
+				rt()
 
-					init_main()
-					console.log("draw_main finish")
-				}
+				init_main()
+				console.log("draw_main finish")
+			}
 
-				function init_main(){
-					console.log("init_main start")
-					$.get($add+'friendlab/'+$id+'/status').complete(function(e){
-						var q = JSON.parse(e.responseText)
-						var time = new Date().getTime()
-						var diff = Math.floor((time-parseInt(q.edit))/900000)
-						if(q.sleep==0){
-							q.energy = parseInt(q.energy,10)-diff
-							if(q.energy<0)q.energy=0
+			function init_main(){
+				console.log("init_main start")
+				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					var time = new Date().getTime()
+					var diff = Math.floor((time-parseInt(q.edit))/900000)
+					if(q.sleep==0){
+						q.energy = parseInt(q.energy,10)-diff
+						if(q.energy<0)q.energy=0
 							q.hungry = parseInt(q.hungry,10)-diff
-							if(q.hungry<0)q.hungry=0
+						if(q.hungry<0)q.hungry=0
 							q.clean = parseInt(q.clean,10)-diff
-							if(q.clean<0)q.clean=0
+						if(q.clean<0)q.clean=0
 
-							int_decrease = setInterval(decrease,900000)
-							clearInterval(int_sleep)
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
 
-						}else if(q.sleep==1){
-							q.energy = parseInt(q.energy,10)+Math.floor((time-parseInt(q.edit,10))/12000)
-							if (q.energy>100)q.energy=100
+					}else if(q.sleep==1){
+						q.energy = parseInt(q.energy,10)+Math.floor((time-parseInt(q.edit,10))/12000)
+						if (q.energy>100)q.energy=100
 
-							clearInterval(int_decrease)
-							int_sleep = setInterval(sleepmode,6000)
+						clearInterval(int_decrease)
+						int_sleep = setInterval(sleepmode,6000)
 
-						}else{
+					}else{
 
-						}
-						q.edit = time
-						post(q)
-						update(q)
-					})
-					console.log("init_main finish")
-				}
-
-				function rt(){
-					console.log("rt start")
-					var cvs = document.getElementById("canvas")
-					var cv = cvs.getContext("2d")
-
-					var img = new Image()
-					img.src = 'bg/lab01.jpg'
-					cv.drawImage(img,0,0,320,524)
-					img.src = 'images/images/b_0'+($pic+1)+'.png'
-					cv.drawImage(img,10,$top[$pic],300,300)
-					clearInterval(int_return)
-					console.log("rt finish")
-				}
-
-				function sleepmode(){
-					console.log("sleepmode start")
-					$.get($add+'friendlab/'+$id+'/status').complete(function(e){
-						var q = JSON.parse(e.responseText)
-						if(q.sleep==1){
-							var cvs = document.getElementById("canvas")
-							var cv = cvs.getContext("2d")
-
-							var img = new Image()
-							img.src = 'bg/bed01.jpg'
-							cv.drawImage(img,-80,-131,480,786)
-							img.src = 'images/images/b_0'+($pic+1)+'.png'
-							cv.drawImage(img,10,$top[$pic]-120,300,300)
-							img.src = 'bg/bed02.png'
-							cv.drawImage(img,-80,-81,480,786)
-
-							if(q.energy<100)q.energy = parseInt(q.energy,10)+1
-							q.edit = new Date().getTime()
-							update(q)
-							post(q)
-						}
-					})
-					console.log("sleepmode finish")
-				}
-
-				function decrease() {
-					console.log("decrease start")
-				 	$.get($add+'friendlab/'+$id+'/status').complete(function(e){
-						var q = JSON.parse(e.responseText)
-						if(q.sleep==0){
-							if(q.energy>0)q.energy = parseInt(q.energy,10)-1
-							if(q.hungry>0)q.hungry = parseInt(q.hungry,10)-1
-							if(q.clean>0)q.clean = parseInt(q.clean,10)-1
-							q.edit = new Date().getTime()
-							update(q)
-							post(q)
-						}
-					})
-					console.log("decrease finish")
-				}
-
-				function clear(){
-					console.log("clear start")
-					clearInterval(int_decrease)
-					clearInterval(int_sleep)
-					clearInterval(int_return)
-					$('#content').css({'background-image':'','background-size':'cover','background-position':'bottom'})
-					$('#stl').css({'margin-top':'0','margin-left':'0'})
-					$('#stl').html()
-					$('#btl').css({'margin-top':'0','margin-left':'0'})
-					$('#btl').html()
-					$('#fnl').css({'margin-top':'0','margin-left':'0'})
-					$('#fnl').html()
-					$('#ctl').css({'margin-top':'0','margin-left':'0'})
-					$('#ctl').html()
-					console.log("clear finish")
-				}
-
-
-				function update(q){
-					var sl = (q.sleep==0)?'false':'true'
-					var hgc = (q.hungry>50)?'#66cc33':(q.hungry>20)?'#ffcc00':'#ff3300'
-					var enc = (q.energy>50)?'#66cc33':(q.energy>20)?'#ffcc00':'#ff3300'
-					var clc = (q.clean>50)?'#66cc33':(q.clean>20)?'#ffcc00':'#ff3300'
-					$('#hg').css({'background-color':hgc,'width':parseInt(q.hungry,10)*(0.9)+'%',})
-					$('#en').css({'background-color':enc,'width':parseInt(q.energy,10)*(0.9)+'%',})
-					$('#cl').css({'background-color':clc,'width':parseInt(q.clean,10)*(0.9)+'%',})
-					$('#gl').html('<img src="images/gold.png" style="height: 30px;">'+q.gold)
-					var pic = (q.sleep==1)?'sleep':(q.hungry>50&&q.energy>50&&q.clean>50)?'smile':(q.hungry<21||q.energy<21||q.clean<21)?'angry':'normal'
-					$('#mood').html('<img src="images/'+pic+'.png" style="height: 38;">')
-				}
-
-				function post(q){
-					var time = new Date().getTime();
-					$.post($add+'friendlab/'+$id+'/post/'+q.energy+'/'+q.hungry+'/'+q.clean+'/'+time+'/'+q.sleep+'/'+q.gold)
+					}
+					q.edit = time
+					post(q)
 					update(q)
-				}
+				})
+				console.log("init_main finish")
+			}
 
-				function share(){
-					console.log("share start")
-				    html2canvas(document.body, {
-					    onrendered: function(canvas) {
-					    	window.open(canvas.toDataURL())
-					    }
-				    })
-				    console.log("share finish")
-				}
+			function rt(){
+				console.log("rt start")
+				var cvs = document.getElementById("canvas")
+				var cv = cvs.getContext("2d")
 
-				function feed(){
-					console.log("feed start")
-					$.get($add+'friendlab/'+$id+'/status').complete(function(e){
-						var q = JSON.parse(e.responseText)
-						if(q.gold>=20 && q.clean>5){
-							int_decrease = setInterval(decrease,900000)
-							clearInterval(int_sleep)
-							clearInterval(int_return)
-							int_return = setInterval(rt,10000)
+				cv.drawImage(image('bg/lab01.jpg'),0,0,320,524)
+				cv.drawImage(image('images/images/b_0'+($pic+1)+'.png'),10,$top[$pic],300,300)
+				clearInterval(int_return)
+				console.log("rt finish")
+			}
 
-							var cvs = document.getElementById("canvas")
-							var cv = cvs.getContext("2d")
+			function sleepmode(){
+				console.log("sleepmode start")
+				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.sleep==1){
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
 
-							var img = new Image()
-							img.src = 'bg/kitchen01.jpg'
-							cv.drawImage(img,0,0,320,524)
-							img.src = 'images/images/b_0'+($pic+1)+'.png'
-							cv.drawImage(img,10,$top[$pic]-60,300,300)
-							img.src = 'bg/kitchen02.png'
-							cv.drawImage(img,0,0,320,524)
+						cv.drawImage(image('bg/bed01.jpg'),-80,-131,480,786)
+						cv.drawImage(image('images/images/b_0'+($pic+1)+'.png'),10,$top[$pic]-120,300,300)
+						cv.drawImage(image('bg/bed02.png'),-80,-81,480,786)
 
-							q.gold = parseInt(q.gold,10)-20
-							q.hungry = parseInt(q.hungry,10)+20+Math.floor(Math.random()*6)
-							if(q.hungry>100)q.hungry=100
-							q.clean = parseInt(q.clean,10)-5
-							q.sleep = 0
-							post(q)
-						}
-					})
-					console.log("feed finish")
-				}
+						if(q.energy<100)q.energy = parseInt(q.energy,10)+1
+						q.edit = new Date().getTime()
+						update(q)
+						post(q)
+					}
+				})
+				console.log("sleepmode finish")
+			}
 
-				function sleep(){
-					console.log("sleep start")
-					$.get($add+'friendlab/'+$id+'/status').complete(function(e){
-						var q = JSON.parse(e.responseText)
-						if(q.energy<=50&&q.sleep==0){
-							clearInterval(int_return)
+			function decrease() {
+				console.log("decrease start")
+				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.sleep==0){
+						if(q.energy>0)q.energy = parseInt(q.energy,10)-1
+						if(q.hungry>0)q.hungry = parseInt(q.hungry,10)-1
+						if(q.clean>0)q.clean = parseInt(q.clean,10)-1
+						q.edit = new Date().getTime()
+						update(q)
+						post(q)
+					}
+				})
+				console.log("decrease finish")
+			}
 
-							var cvs = document.getElementById("canvas")
-							var cv = cvs.getContext("2d")
-
-							var img = new Image()
-							img.src = 'bg/bed01.jpg'
-							cv.drawImage(img,0,0,320,524)
-							img.src = 'images/images/b_0'+($pic+1)+'.png'
-							cv.drawImage(img,10,$top[$pic],300,300)
-							img.src = 'bg/bed02.png'
-							cv.drawImage(img,0,-60,320,524)
-
-							q.sleep = 1
-							post(q)
-
-							clearInterval(int_decrease)
-							int_sleep = setInterval(sleepmode,6000)
-						}
-					})
-					console.log("sleep finish")
-				}
-
-				function clean(){
-					console.log("clean start")
-					$.get($add+'friendlab/'+$id+'/status').complete(function(e){
-						var q = JSON.parse(e.responseText)
-						if(q.hungry>5){
-							int_decrease = setInterval(decrease,900000)
-							clearInterval(int_sleep)
-							clearInterval(int_return)
-							int_return = setInterval(rt,10000)
-
-							var cvs = document.getElementById("canvas")
-							var cv = cvs.getContext("2d")
-
-							var img = new Image()
-							img.src = 'bg/bath01.jpg'
-							cv.drawImage(img,0,0,320,524)
-							img.src = 'images/images/b_0'+($pic+1)+'.png'
-							cv.drawImage(img,10,$top[$pic]-60,300,300)
-							img.src = 'bg/bath02.png'
-							cv.drawImage(img,0,0,320,524)
-
-							q.clean = parseInt(q.clean,10)+20+Math.floor(Math.random()*31)
-							if(q.clean>100)q.clean=100
-							q.hungry = parseInt(q.hungry,10)-5
-							q.sleep = 0
-							post(q)
-						}
-					})
-					console.log("clean finish")
-				}
-
-				function minigame(){
-					console.log("minigame start")
-					$.get($add+'friendlab/'+$id+'/status').complete(function(e){
-						var q = JSON.parse(e.responseText)
-						if(q.energy>5 && q.clean>5 &&q.hungry>5){
-							int_decrease = setInterval(decrease,900000)
-							clearInterval(int_sleep)
-							rt()
-
-							q.energy = parseInt(q.energy,10)-5
-							q.clean = parseInt(q.clean,10)-5
-							q.hungry = parseInt(q.hungry,10)-5
-							q.gold = parseInt(q.gold,10)+Math.floor(Math.random()*51)
-							q.sleep = 0
-							post(q)
-						}
-					})
-					console.log("minigame finish")
-				}
+			function clear(){
+				console.log("clear start")
+				clearInterval(int_decrease)
+				clearInterval(int_sleep)
+				clearInterval(int_return)
+				$('#content').css({'background-image':'','background-size':'cover','background-position':'bottom'})
+				$('#stl').css({'margin-top':'0','margin-left':'0'})
+				$('#stl').html()
+				$('#btl').css({'margin-top':'0','margin-left':'0'})
+				$('#btl').html()
+				$('#fnl').css({'margin-top':'0','margin-left':'0'})
+				$('#fnl').html()
+				$('#ctl').css({'margin-top':'0','margin-left':'0'})
+				$('#ctl').html()
+				console.log("clear finish")
+			}
 
 
-			</script>
+			function update(q){
+				var sl = (q.sleep==0)?'false':'true'
+				var hgc = (q.hungry>50)?'#66cc33':(q.hungry>20)?'#ffcc00':'#ff3300'
+				var enc = (q.energy>50)?'#66cc33':(q.energy>20)?'#ffcc00':'#ff3300'
+				var clc = (q.clean>50)?'#66cc33':(q.clean>20)?'#ffcc00':'#ff3300'
+				$('#hg').css({'background-color':hgc,'width':parseInt(q.hungry,10)*(0.9)+'%',})
+				$('#en').css({'background-color':enc,'width':parseInt(q.energy,10)*(0.9)+'%',})
+				$('#cl').css({'background-color':clc,'width':parseInt(q.clean,10)*(0.9)+'%',})
+				$('#gl').html('<img src="images/gold.png" style="height: 30px;">'+q.gold)
+				var pic = (q.sleep==1)?'sleep':(q.hungry>50&&q.energy>50&&q.clean>50)?'smile':(q.hungry<21||q.energy<21||q.clean<21)?'angry':'normal'
+				$('#mood').html('<img src="images/'+pic+'.png" style="height: 38;">')
+			}
+
+			function post(q){
+				var time = new Date().getTime();
+				$.post($add+'friendlab/'+$id+'/post/'+q.energy+'/'+q.hungry+'/'+q.clean+'/'+time+'/'+q.sleep+'/'+q.gold)
+				update(q)
+			}
+
+			function share(){
+				console.log("share start")
+				html2canvas(document.body, {
+					onrendered: function(canvas) {
+						window.open(canvas.toDataURL())
+						FB.api('/me/photos','post',{url:''}, function(response) {
+						    if (!response || response.error) {
+						        //error
+						    } else {
+						        picid = response.id
+						    }
+						});
+					}
+				})
+				console.log("share finish")
+			}
+
+			function feed(){
+				console.log("feed start")
+				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.gold>=20 && q.clean>5){
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
+						clearInterval(int_return)
+						int_return = setInterval(rt,10000)
+
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
+
+						cv.drawImage(image('bg/kitchen01.jpg'),0,0,320,524)
+						cv.drawImage(image('images/images/b_0'+($pic+1)+'.png'),10,$top[$pic]-60,300,300)
+						cv.drawImage(image('bg/kitchen02.png'),0,0,320,524)
+
+						q.gold = parseInt(q.gold,10)-20
+						q.hungry = parseInt(q.hungry,10)+20+Math.floor(Math.random()*6)
+						if(q.hungry>100)q.hungry=100
+						q.clean = parseInt(q.clean,10)-5
+						q.sleep = 0
+						post(q)
+					}
+				})
+				console.log("feed finish")
+			}
+
+			function sleep(){
+				console.log("sleep start")
+				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.energy<=50&&q.sleep==0){
+						clearInterval(int_return)
+
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
+
+						cv.drawImage(image('bg/bed01.jpg'),0,0,320,524)
+						cv.drawImage(image('images/images/b_0'+($pic+1)+'.png'),10,$top[$pic],300,300)
+						cv.drawImage(image('bg/bed02.png'),0,-60,320,524)
+
+						q.sleep = 1
+						post(q)
+
+						clearInterval(int_decrease)
+						int_sleep = setInterval(sleepmode,6000)
+					}
+				})
+				console.log("sleep finish")
+			}
+
+			function clean(){
+				console.log("clean start")
+				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.hungry>5){
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
+						clearInterval(int_return)
+						int_return = setInterval(rt,10000)
+
+						var cvs = document.getElementById("canvas")
+						var cv = cvs.getContext("2d")
+
+						cv.drawImage(image('bg/bath01.jpg'),0,0,320,524)
+						cv.drawImage(image('images/images/b_0'+($pic+1)+'.png'),10,$top[$pic]-60,300,300)
+						cv.drawImage(image('bg/bath02.png'),0,0,320,524)
+
+						q.clean = parseInt(q.clean,10)+20+Math.floor(Math.random()*31)
+						if(q.clean>100)q.clean=100
+						q.hungry = parseInt(q.hungry,10)-5
+						q.sleep = 0
+						post(q)
+					}
+				})
+				console.log("clean finish")
+			}
+
+			function minigame(){
+				console.log("minigame start")
+				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
+					var q = JSON.parse(e.responseText)
+					if(q.energy>5 && q.clean>5 &&q.hungry>5){
+						int_decrease = setInterval(decrease,900000)
+						clearInterval(int_sleep)
+						rt()
+
+						q.energy = parseInt(q.energy,10)-5
+						q.clean = parseInt(q.clean,10)-5
+						q.hungry = parseInt(q.hungry,10)-5
+						q.gold = parseInt(q.gold,10)+Math.floor(Math.random()*51)
+						q.sleep = 0
+						post(q)
+					}
+				})
+				console.log("minigame finish")
+			}
+
+			function image(des){
+				var new_image = new Image()
+				new_image.src = des
+				return new_image
+			}
+
+		</script>
+	</div>
+
+
+	<!-- Header ..............................................................................................-->
+
+
+	<div data-theme="a" class="my-page" style='position:relative;z-index:5' >
+		<div data-role="header">
+			<div class="ui-btn-right" id="rhead"></div>
+			<span class="ui-title" id="mhead"></span>
+			<div class="ui-btn-left" id="lhead"></div>
 		</div>
+	</div>
 
 
-<!-- Header ..............................................................................................-->
+	<!-- Content .............................................................................................-->
 
 
-		<div data-theme="a" class="my-page" style='position:relative;z-index:5' >
-			<div data-role="header">
-				<div class="ui-btn-right" id="rhead"></div>
-				<span class="ui-title" id="mhead"></span>
-				<div class="ui-btn-left" id="lhead">
-				</div>
-			</div>
-		</div>
-
-
-<!-- Content .............................................................................................-->
-
-
-		<div id="content" style='position:relative;z-index:0;width:320px;height:524px;background-image:url(bg/lab1x.jpg);background-size:cover;background-position:bottom;'>
+	<div id="content" style='position:relative;z-index:0;width:320px;height:524px;background-image:url(bg/lab1x.jpg);background-size:cover;background-position:bottom;'>
 	<!-- ..... status bar layer ......................................................................... -->
-			<div id="stl" style='position:absolute;z-index:5'>
-				<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">
-				<a href"#" onclick="FB.login(function(){},{scope:'read_friendlists'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:0 55"></a>
-			</div>
-	<!-- ..... button layer ............................................................................. -->
-			<div id="btl" style='position:absolute;z-index:4'></div>
-	<!-- ..... front background layer ................................................................... -->
-			<div id="fnl" style='position:absolute;z-index:3'></div>
-	<!-- ..... charactor layer .......................................................................... -->
-			<div id="ctl" style='position:absolute;z-index:2'></div>
+		<div id="stl" style='position:absolute;z-index:5'>
+			<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">
+			<a href"#" onclick="FB.login(function(){},{scope:'read_friendlists'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:0 55"></a>
 		</div>
+		<!-- ..... button layer ............................................................................. -->
+		<div id="btl" style='position:absolute;z-index:4'></div>
+		<!-- ..... front background layer ................................................................... -->
+		<div id="fnl" style='position:absolute;z-index:3'></div>
+		<!-- ..... charactor layer .......................................................................... -->
+		<div id="ctl" style='position:absolute;z-index:2'></div>
+	</div>
 	</body>
 </html>
