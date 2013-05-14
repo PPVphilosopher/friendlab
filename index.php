@@ -22,6 +22,7 @@
 			$return = array('success' => FALSE);
 		}else{
 			$return = array(
+				'success' => TRUE,
 				'id'=>$ava->id,
 				'gold'=>$ava->gold,
 				'hungry'=>$ava->hungry,
