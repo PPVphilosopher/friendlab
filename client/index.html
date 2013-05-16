@@ -1,5 +1,5 @@
 <html>
-	<link rel="stylesheet" href="jquery.mobile-1.3.1.min.css" />
+	<link rel="stylesheet" href="jquery.mobile-1.3.1.css" />
 	<script src="jquery-1.9.1.js"></script>
 	<script src="html2canvas.js"></script>
 	<script src="jquery.mobile-1.3.1.min.js"></script>
@@ -18,7 +18,7 @@
 	</head>
 	<body>
 
-	<!--.....How to play CSS style code.......................................................................-->
+	<!--.................CSS style code.......................................................................-->
 
 	<style type="text/css">
 		div.hungry {background-color:#66cc33; 
@@ -93,6 +93,7 @@
 
 			$id = 0
 			$pic = 0
+			$avaid = 0
 
 			var int_decrease = setInterval(function(){},0)
 			var int_sleep = setInterval(function(){},0)
@@ -178,6 +179,7 @@
 						'<a href"#" onclick="init()"><img src="GRAPHIC/facebookas.png" style="width:210;height:70;margin:0 55"></a>'+
 						'<a href"#" onclick="diff()"><img src="GRAPHIC/facebookdiff.png" style="width:210;height:70;margin:20 55"></a>'						
 					)
+					$('body').trigger('create')
 				});
 			}
 
@@ -209,6 +211,7 @@
 			}
 
 			function htp(){
+				console.log('how to play start')
 				$('#mhead').html('How to play')
 				$('#stl').html(
 					'<table border=\'0\' width="100%">'+
@@ -253,39 +256,184 @@
 				$(document).ready(function(){
 					$swipe=1;
 					$(function(){
-					    $('div.htp1').on('swipeleft',swipeHandler);
-					    function swipeHandler(event){
-						    if($swipe<4){
-						    	$(event.target).removeClass('r1 r2 r3 r4');
-						    	$(event.target).addClass( 'r'+($swipe+1) );
-						    	$swipe=$swipe+1;
-						    }
+						$('div.htp1').on('swipeleft',swipeHandler);
+						function swipeHandler(event){
+							if($swipe<4){
+								$(event.target).removeClass('r1 r2 r3 r4');
+								$(event.target).addClass( 'r'+($swipe+1) );
+								$swipe=$swipe+1;
+							}
 						}
 					});
 
 					$(function(){
-					    $('div.htp1').on('swiperight',swipeHandler);
-				    	function swipeHandler(event){
-				    		if($swipe>1){
-					    		$(event.target).removeClass('r1 r2 r3 r4');
-					    		$(event.target).addClass( 'r'+($swipe-1) );
-					    		$swipe=$swipe-1;
-				    		}
-				    	}
-				    });
+						$('div.htp1').on('swiperight',swipeHandler);
+						function swipeHandler(event){
+							if($swipe>1){
+								$(event.target).removeClass('r1 r2 r3 r4');
+								$(event.target).addClass( 'r'+($swipe-1) );
+								$swipe=$swipe-1;
+							}
+						}
+					});
 				});
+				console.log('how to play finish')
 			}
 
 			function new_char(){
+				console.log('new char start')
 				$('#mhead').html('New character')
 				$('#stl').removeClass('r1 r2 r3 r4 bg1')
+				$('#stl').html('')
 				$('#content').css({'background-image':'url(bg/lab01.jpg)'})
-				$('#stl').html(
+				$('#ctl').html(
 					'<div style="width:300px;height:500px;background-image:url(bg/newchar.png);background-size:cover;margin:10">'+
-						'<div style="width:280px;height:400px;overflow:scroll;">'+
+						'<img src=images/fr.png style="width:250;height:50;margin:15 25">'+
+						'<div id="list" align=center style="width:250px;height:400px;background-image:url(bg/newcharbox.png);background-size:cover;overflow:auto;margin:-10 25">'+
 							''+
 						'</div>'+
-					'</div>')
+					'</div>'
+				)
+				FB.api('/me/friends', function(res) {
+					res.data.sort(function(a,b){
+						return ((a['name']<b['name'])?-1:((a['name']>b['name'])?1:0))
+					})
+					var i = 0;
+					for(pr in res.data){
+						var xid = res.data[pr]["id"]
+						var xname = res.data[pr]["name"]
+						$('#list').append('<a href="#" onclick="sel('+xid+')"><img src="https://graph.facebook.com/'+xid+'/picture?width=100&height=100"><br>'+xname+'</a><br>-------------------------------------<br>')
+						i++
+						if(i>9)break
+					}
+				})
+				console.log('new char finish')
+			}
+
+			function sel(xid){
+				console.log('select '+xid+' start')
+				FB.api('/'+xid,function(res){
+					$('#stl').html(
+						'<div style="background-image:url(bg/sel.png);background-size:cover;width:320px;height:524px;position:absolute" align=center>'+
+							'<br><h1>Your selection is</h1><br>'+
+							'<img src="https://graph.facebook.com/'+xid+'/picture?width=100&height=100"><br>'+
+							'<h2>'+res.name+'</h2><br>'+
+							'<table>'+
+								'<tr>'+
+									'<td>'+
+										'<a href="#" onclick="dissel()"><img src="images/Buttonback.png" style="height:50"></a>'+
+									'</td>'+
+									'<td>'+
+										'<a href="#" onclick="choose_mixer('+xid+')"><img src="images/Buttonnext.png" style="height:50"></a>'+
+									'</td>'+
+								'</tr>'+
+							'</table>'+
+						'</div>'
+					)
+				})
+				console.log('select '+xid+' finish')
+			}
+
+			function dissel(){
+				console.log('disselect start')
+				$('#stl').html('')
+				console.log('disselect finish')
+			}
+
+			function choose_mixer(xid){
+				$avaid = xid
+				console.log('choose mixer start')
+				clear()
+				$('#mhead').html('New character')
+				$('#stl').html(
+					'<img src=images/choose.png style="width:300;margin:10 10">'+
+					'<img src=images/setA.png style="width:80;margin-left:10">'+
+					'<div align="center">'+
+						'<form>'+
+						    '<fieldset data-role="controlgroup" data-type="horizontal">'+
+						        '<input type="radio" data-theme="a" name="setA" id="mix1" value=1 checked="checked">'+
+						        '<label for="mix1"><img src="images/set1-mix1.png" style="height:120px;"></label>'+
+						        '<input type="radio" data-theme="a" name="setA" id="mix2" value=2>'+
+						        '<label for="mix2"><img src="images/set1-mix2.png" style="height:120px;"></label>'+
+						        '<input type="radio" data-theme="a" name="setA" id="mix3" value=3>'+
+						        '<label for="mix3"><img src="images/set1-mix3.png" style="height:120px;"></label>'+
+						    '</fieldset>'+
+						'</form>'+
+					'</div>'+
+					'<img src=images/setB.png style="width:80;margin-left:10">'+
+					'<div align="center">'+
+						'<form>'+
+						    '<fieldset data-role="controlgroup" data-type="horizontal">'+
+						        '<input type="radio" data-theme="a" name="setB" id="mix1" value=1 checked="checked">'+
+						        '<label for="mix1"><img src="images/set2-mix1.png" style="height:60px;"></label>'+
+						        '<input type="radio" data-theme="a" name="setB" id="mix2" value=2>'+
+						        '<label for="mix2"><img src="images/set2-mix2.png" style="height:60px;"></label>'+
+						        '<input type="radio" data-theme="a" name="setB" id="mix3" value=3>'+
+						        '<label for="mix3"><img src="images/set2-mix3.png" style="height:60px;"></label>'+
+						    '</fieldset>'+
+						'</form>'+
+					'</div>'+
+					'<div align="right">'+
+						'<a href="#" onclick="new_char2()">'+
+							'<img src="images/Buttonnext.png" style="height: 53px;margin:12 10;">'+
+						'</a>'+
+					'</div>'
+				)
+				$('body').trigger('create')
+				$('#stl').addClass('bg1')
+				console.log('choose mixer finish')
+			}
+
+			function new_char2(){
+				console.log('new char2 start')
+				var a = $("input:radio[name='setA']:checked").val()
+				var b = $("input:radio[name='setB']:checked").val()
+				var mix1 = image('images/mix1.png')
+				var mix2 = image('images/mix2.png')
+				var mix3 = image('images/mix3.png')
+				var ax = image('images/a'+a+'.png')
+				var bx = image('images/b'+b+'.png')
+				$('#stl').html(
+					'<br><br><br><br>'+
+					'<div align=center>'+
+						'<table width=80%>'+
+							'<col width="40%">'+
+							'<col width="20%">'+
+							'<col width="40%">'+
+							'<tr>'+
+								'<td>'+
+									'<img src=images/set1-mix'+a+'x.png style="width:105">'+
+								'</td>'+
+								'</td>'+
+								'<td>'+
+								'<td style="text-align:right">'+
+									'<img src=images/set2-mix'+b+'x.png style="width:90">'+
+								'</td>'+
+							'<tr>'+
+						'</table>'+
+					'</div>'+
+					'<br><br><br><br>'+
+					'<div id="mixbox" align=center>'+
+						'<canvas id="mixer" style="margin-left:70"></canvas>'+
+					'</div>'
+				)
+				var cvs = document.getElementById("mixer")
+				var cv = cvs.getContext("2d")
+				cv.drawImage(mix1,0,0)
+				setTimeout(function(){
+					cv.drawImage(ax,0,0)
+						setTimeout(function(){
+							cv.drawImage(bx,0,0)
+								setTimeout(function(){
+									cv.drawImage(mix1,0,0)
+									cv.drawImage(mix2,0,0)
+										setTimeout(function(){
+											cv.drawImage(mix3,0,0)
+										},2000)
+								},2000)
+						},500)
+				},2000)
+				console.log('new char2 finish')
 			}
 
 			function draw_main(){
@@ -494,11 +642,11 @@
 					onrendered: function(canvas) {
 						window.open(canvas.toDataURL())
 				/*		FB.api('/me/photos','post',{url:''}, function(response) {
-						    if (!response || response.error) {
-						        //error
-						    } else {
-						        picid = response.id
-						    }
+							if (!response || response.error) {
+								//error
+							} else {
+								picid = response.id
+							}
 						}); */
 					}
 				})
