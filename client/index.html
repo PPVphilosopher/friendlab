@@ -172,7 +172,6 @@
 					clear()
 					$('#content').css({'background-image':'url(bg/lab1x.jpg)'})
 					$id = response.id
-					loadpic['user'] = image("https://graph.facebook.com/"+$id+"/picture?width=76&height=76")
 					$('#stl').html('<a href"#" onclick="init()"><img src="https://graph.facebook.com/'+$id+'/picture?type=square" style="width:40;height:40"></a>')
 					$('#stl').css({'margin':'337 190'})
 					$('#btl').html('<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
@@ -386,61 +385,67 @@
 
 			function new_char2(){
 				console.log('new char2 start')
+				$pic = Math.floor(Math.random()*4)
 				var a = $("input:radio[name='setA']:checked").val()
 				var b = $("input:radio[name='setB']:checked").val()
-				var mix1 = image('images/mix1.png')
-				var mix2 = image('images/mix2.png')
-				var mix3 = image('images/mix3.png')
-				var ax = image('images/a'+a+'.png')
-				var bx = image('images/b'+b+'.png')
 				$('#stl').html(
-					'<br><br><br><br>'+
-					'<div align=center>'+
-						'<table width=80%>'+
-							'<col width="40%">'+
-							'<col width="20%">'+
-							'<col width="40%">'+
-							'<tr>'+
-								'<td>'+
-									'<img src=images/set1-mix'+a+'x.png style="width:105">'+
-								'</td>'+
-								'</td>'+
-								'<td>'+
-								'<td style="text-align:right">'+
-									'<img src=images/set2-mix'+b+'x.png style="width:90">'+
-								'</td>'+
-							'<tr>'+
-						'</table>'+
-					'</div>'+
-					'<br><br><br><br>'+
-					'<div id="mixbox" align=center>'+
-						'<canvas id="mixer" style="margin-left:70"></canvas>'+
-					'</div>'
+					'<div id="mix0" style="width:320;height:524;overflow:hidden;position:absolute;z-index:3"></div>'+
+					'<div id="mix1" style="width:320;height:524;overflow:hidden;position:absolute;z-index:2"></div>'+
+					'<div id="mix2" style="width:320;height:524;overflow:hidden;position:absolute;z-index:1"></div>'
 				)
-				var cvs = document.getElementById("mixer")
-				var cv = cvs.getContext("2d")
-				cv.drawImage(mix1,0,0)
+				$('#mix0').html('<img src=images/boom.png id="mix" style="width:0;margin-top:220;margin-left:160">')
+				$('#mix1').html('<img src=images/set2-mix'+b+'.png id="mixB" style="margin:150 320">')
+				$('#mix2').html('<img src=images/set1-mix'+a+'.png id="mixA" style="margin:100 0">')
 				setTimeout(function(){
-					cv.drawImage(ax,0,0)
+					$('#mixA').animate({marginLeft:"+=80px"},300)
+					$('#mixB').animate({marginLeft:"-=160px"},300)
+					$('#mixA').animate({height:"-=250px",marginLeft:"+=80px",marginTop:"+=125px"},500)
+					$('#mixB').animate({height:"-=150px",marginTop:"+=75px"},500)
+					setTimeout(function(){
+						$('#mix').animate({width:"+=320px",marginLeft:"-=160px",marginTop:"-=100px"},500)
 						setTimeout(function(){
-							cv.drawImage(bx,0,0)
-								setTimeout(function(){
-									cv.drawImage(mix1,0,0)
-									cv.drawImage(mix2,0,0)
-										setTimeout(function(){
-											cv.drawImage(mix3,0,0)
-										},2000)
-								},2000)
+							$('#mix1').html('<img src=bg/white.png style="width:320;height:524" id="white">')
+							$('#mix').fadeOut(2000)
+							$('#white').fadeIn(2000,new_char3())
 						},500)
-				},2000)
+					},300)
+				},50)
 				console.log('new char2 finish')
+			}
+
+			function new_char3(){
+				console.log('new char3 start')
+				$('#mix0').html('<img src=bg/white.png style="width:320;height:524" id="white">')
+				$('#mix1').html('<img id="xxx" src=images/images/b_0'+($pic+1)+'.png style="width:300;margin:'+($top[$pic]-100)+' 10">')
+				$('#mix2').html('<img id="yyy" src=https://graph.facebook.com/'+$avaid+'/picture?width=76&height=76 style="margin:'+($top[$pic]-10)+' 122">')
+				$('#xxx').animate({marginTop:"+=100px"},2000)
+				$('#yyy').animate({marginTop:"+=100px"},2000)
+				var time = new Date().getTime()
+				$.post($add+'friendlab/new/'+$id+'/'+$avaid+'/'+$pic+'/'+time)
+				$('#white').fadeOut(3000,function(){
+					$('#mix0').html('<a href="#" onclick="start()"><img src=images/Buttonplay.png style="width:160;margin:20 80"></a>')
+				})
+				console.log('new char3 finish')
+			}
+
+			function start(){
+				clear()
+				draw_main()
+				rt()
 			}
 
 			function draw_main(){
 				console.log("draw_main start")
+				$('#content').html('<div id="stl" style=\'position:absolute;z-index:5\'>'+
+						'<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
+						'<a href"#" onclick="FB.login(function(){},{scope:\'read_friendlists\'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:0 55"></a>'+
+					'</div>'+
+					'<div id="btl" style=\'position:absolute;z-index:4\'></div>'+
+					'<div id="fnl" style=\'position:absolute;z-index:3\'></div>'+
+					'<div id="ctl" style=\'position:absolute;z-index:2\'></div>')
 				$('#mhead').html('Friendlab')
 				$('#rhead').html('<a href="#" onclick="minigame()"><img src="images/mini.png" style="width:36px"></a>')
-				$('#lhead').html('<img src="images/reset.png" style="width:32px">')
+				$('#lhead').html('<a href="#" onclick="kill()"><img src="images/reset.png" style="width:32px"></a>')
 				$('#stl').css({'margin-top':'0','margin-left':'0'})
 				$('#stl').html(
 					'<table border="0" width="100%" style="width: 20em;" >'+
@@ -514,6 +519,9 @@
 				console.log("init_main start")
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
+					$id = q.id
+					$avaid = q.pic
+					loadpic['user'] = image("https://graph.facebook.com/"+$avaid+"/picture?width=76&height=76")
 					$pic = parseInt(q.avatar)
 					var time = new Date().getTime()
 					var diff = Math.floor((time-parseInt(q.edit))/900000)
@@ -597,6 +605,13 @@
 					}
 				})
 				console.log("decrease finish")
+			}
+
+			function kill(){
+				console.log('kill start')
+				$.post($add+'friendlab/del/'+$id)
+				testAPI()
+				console.log('kill finish')
 			}
 
 			function clear(){
