@@ -31,12 +31,40 @@
 				'edit'=>$ava->edit,
 				'sleep'=>$ava->sleep,
 				'avatar'=>$ava->avatar,
-				'pic'=>$ava->pic,
-				'type'=>$ava->type
+				'pic'=>$ava->pic
 			);
 		}
 
 		$res->body(json_encode($return));
+	});
+
+	$app->post('/new/:id/:avaid/:pic/:time',function($id,$avaid,$pic,$time) use($app){
+		$new = Model::factory('Avatar')->create();
+		$new->id=$id;
+		$new->gold=100;
+		$new->hungry=100;
+		$new->energy=100;
+		$new->clean=100;
+		$new->sleep=0;
+		$new->edit=$time;
+		$new->avatar=$pic;
+		$new->pic=$avaid;
+		$new->save();
+
+		$res = $app->response();
+		$res['Content-Type'] = 'application/json';
+		$res->body(json_encode(array('success' => TRUE)));
+	});
+
+	$app->post('/del/:id',function($id) use($app){
+		$ava = Model::factory('Avatar')
+		->where('id',$id)
+		->find_one();
+		$ava->delete($id);
+
+		$res = $app->response();
+		$res['Content-Type'] = 'application/json';
+		$res->body(json_encode(array('success' => TRUE)));
 	});
 
 	$app->post('/:id/post/:e/:h/:c/:t/:p/:g',function($id,$e,$h,$c,$t,$p,$g) use($app){
