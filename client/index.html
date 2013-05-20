@@ -6,8 +6,6 @@
 	<script src="all.js"></script>
 
 
-
-
 	<!--.....html code........................................................................................-->
 
 
@@ -18,70 +16,74 @@
 	</head>
 	<body>
 
+
 	<!--.................CSS style code.......................................................................-->
+
 
 	<style type="text/css">
 		div.hungry {background-color:#66cc33; 
-					height: 2em; 
-					width: 90%; 
-					color:#FFF; 
-					text-align:center;
-					padding:5px auto;
-					-webkit-border-radius: 10px;
-					-moz-border-radius: 10px;
-					border-radius: 10px;
-					margin: 0 5%;
-					vertical-align: middle;
-					line-height: 35px;}
+			height: 2em; 
+			width: 90%; 
+			color:#FFF; 
+			text-align:center;
+			padding:5px auto;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			border-radius: 10px;
+			margin: 0 5%;
+			vertical-align: middle;
+			line-height: 35px;}
 		div.energy {background-color:#66cc33;
-		 			height: 2em;width: 90%;
-		 			color:#FFF; 
-		 			text-align:center;
-					-webkit-border-radius: 10px;
-					-moz-border-radius: 10px;
-		 			border-radius: 10px;
-		 			margin: 0 5%;
-		 			vertical-align: middle;
-					line-height: 35px;}
+ 			height: 2em;width: 90%;
+ 			color:#FFF; 
+ 			text-align:center;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+ 			border-radius: 10px;
+ 			margin: 0 5%;
+ 			vertical-align: middle;
+			line-height: 35px;}
 		div.clean  {background-color:#66cc33;
-		 			height: 2em;
-		 			width: 90%; 
-		 			color:#FFF; 
-		 			text-align:center;
-					-webkit-border-radius: 10px;
-					-moz-border-radius: 10px;
-			 		border-radius: 10px;
-			  		margin: 0 5%;
-			  		vertical-align: middle;
-					line-height: 35px;}
+ 			height: 2em;
+ 			width: 90%; 
+ 			color:#FFF; 
+ 			text-align:center;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+	 		border-radius: 10px;
+	  		margin: 0 5%;
+	  		vertical-align: middle;
+			line-height: 35px;}
 		div.bg1{background-image:url(bg/lab02.jpg);
 			height: 524px;
 			width: 320px;
 			background-size:cover;}
 		div.htp1.r1{background-image:url(images/rhtp1.png);width: 300px;
-				height: 380px;
-				background-size: cover;
-				margin-top: -15px;
-				margin-left: 10px;
-				background-repeat: no-repeat;}
+			height: 380px;
+			background-size: cover;
+			margin-top: -15px;
+			margin-left: 10px;
+			background-repeat: no-repeat;}
 		div.htp1.r2{background-image:url(images/rhtp2.png);width: 300px;
-				height: 380px;
-				background-size: cover;
-				margin-top: -15px;
-				margin-left: 10px;
-				background-repeat: no-repeat;}
+			height: 380px;
+			background-size: cover;
+			margin-top: -15px;
+			margin-left: 10px;
+			background-repeat: no-repeat;}
 		div.htp1.r3{background-image:url(images/rhtp3.png);width: 300px;
-				height: 380px;
-				background-size: cover;
-				margin-top: -15px;
-				margin-left: 10px;
-				background-repeat: no-repeat;}
+			height: 380px;
+			background-size: cover;
+			margin-top: -15px;
+			margin-left: 10px;
+			background-repeat: no-repeat;}
 		div.htp1.r4{background-image:url(images/rhtp4.png);width: 300px;
-				height: 380px;
-				background-size: cover;
-				margin-top: -15px;
-				margin-left: 10px;
-				background-repeat: no-repeat;}
+			height: 380px;
+			background-size: cover;
+			margin-top: -15px;
+			margin-left: 10px;
+			background-repeat: no-repeat;}
+		div.mfp1{background-image:url(images/mfp1.png);}
+		div.mfp2{background-image:url(images/mfp2.png);}
 	</style>
 
 
@@ -445,7 +447,7 @@
 					'<div id="ctl" style=\'position:absolute;z-index:2\'></div>')
 				$('#mhead').html('Friendlab')
 				$('#rhead').html('<a href="#" onclick="minigame()"><img src="images/mini.png" style="width:36px"></a>')
-				$('#lhead').html('<a href="#" onclick="kill()"><img src="images/reset.png" style="width:32px"></a>')
+				$('#lhead').html('<a href="#" onclick="kill_b()"><img src="images/reset.png" style="width:32px"></a>')
 				$('#stl').css({'margin-top':'0','margin-left':'0'})
 				$('#stl').html(
 					'<table border="0" width="100%" style="width: 20em;" >'+
@@ -528,9 +530,9 @@
 					if(q.sleep==0){
 						q.energy = parseInt(q.energy,10)-diff
 						if(q.energy<0)q.energy=0
-							q.hungry = parseInt(q.hungry,10)-diff
+						q.hungry = parseInt(q.hungry,10)-diff
 						if(q.hungry<0)q.hungry=0
-							q.clean = parseInt(q.clean,10)-diff
+						q.clean = parseInt(q.clean,10)-diff
 						if(q.clean<0)q.clean=0
 
 						int_decrease = setInterval(decrease,900000)
@@ -542,16 +544,50 @@
 
 						clearInterval(int_decrease)
 						int_sleep = setInterval(sleepmode,6000)
-
-					}else{
-
 					}
 					q.edit = time
 					post(q)
 					update(q)
 					rt()
+					if(q.energy==0 || q.clean==0 || q.hungry==0){
+						dead()
+					}
 				})
 				console.log("init_main finish")
+			}
+
+			function dead(){
+				console.log('dead start')
+				$('#content').append('<div id="deadwindow" style="position:absolute;z-index:100;height:524;width:320;background-image:url(\'bg/dead.png\');background-size:contain"><a href="#" onclick="kill_a()"><img src=images/deadcaption.png style="margin:100 10"></a></div>')
+				console.log('dead finish')
+			}
+
+			function kill_c(){
+				console.log('kill c start')
+				$('#deadwindow').html('')
+				$('#deadwindow').css({'background-image':''})
+				console.log('kill c finish')
+			}
+
+			function kill_b(){
+				console.log('kill b start')
+				$('#content').append('<div id="deadwindow" style="text-align:center;position:absolute;z-index:100;height:524;width:320;background-image:url(\'bg/dead.png\');background-size:contain">'+
+						'<img src=images/dead.png style="margin:30 60">'+
+						'<h3>Do you want to kill your friend?</h3>'+
+						'<a href="#" onclick="kill_a()"><img src=images/yes.png style="width:100"></a>'+
+						'<a href="#" onclick="kill_c()"><img src=images/no.png style="width:100"></a>'+
+					'</div>')
+				console.log('kill b finish')
+			}
+
+			function kill_a(){
+				console.log('kill a start')
+				$('#deadwindow').fadeOut(5000,function(){
+					$('#deadwindow').html('')
+					$('#deadwindow').css({'background-image':''})
+					kill()
+				})
+				console.log('kill a finish')
 			}
 
 			function rt(){
@@ -560,10 +596,10 @@
 				$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
 				var cvs = document.getElementById("canvas")
 				var cv = cvs.getContext("2d")
-
 				cv.drawImage(loadpic['lab'],0,0,320,524)
 				cv.drawImage(loadpic['user'],122,$top[$pic]+90)
 				cv.drawImage(loadpic['ava'+$pic],10,$top[$pic],300,300)
+
 				clearInterval(int_return)
 				console.log("return lab finish")
 			}
@@ -653,18 +689,20 @@
 
 			function share(){
 				console.log("share start")
-				html2canvas(document.body, {
+				$.post($add+'friendlab/'+$id+'/capture')
+/*				html2canvas(document.body, {
 					onrendered: function(canvas) {
 						window.open(canvas.toDataURL())
-				/*		FB.api('/me/photos','post',{url:''}, function(response) {
+						FB.api('/me/photos','post',{url:''}, function(response) {
 							if (!response || response.error) {
 								//error
 							} else {
 								picid = response.id
 							}
-						}); */
+						}); 
 					}
 				})
+*/
 				console.log("share finish")
 			}
 
@@ -760,7 +798,6 @@
 					if(q.energy>5 && q.clean>5 &&q.hungry>5){
 						int_decrease = setInterval(decrease,900000)
 						clearInterval(int_sleep)
-						rt()
 
 						q.energy = parseInt(q.energy,10)-5
 						q.clean = parseInt(q.clean,10)-5
@@ -768,9 +805,58 @@
 						q.gold = parseInt(q.gold,10)+Math.floor(Math.random()*51)
 						q.sleep = 0
 						post(q)
+
+						htp_mini()
 					}
 				})
 				console.log("minigame finish")
+			}
+
+			function htp_mini(){
+				console.log('how to play mini game start')
+				clear()
+				$('#mhead').html('MonsterFriend')
+				$('#lhead').html('')
+				$('#rhead').html('')
+				$('#stl').html(
+					'<div class="minibg1" style="background-image:url(bg/minigameBG.jpg);background-size:contain;z-index:1;position:absolute;height:524;width:320;overflow:hidden"></div>'+
+					'<div class="minibg2" style="background-image:url(bg/minigameBG02.png);background-size:contain;z-index:2;position:absolute;height:524;width:320;overflow:hidden"></div>'+
+					'<div style="z-index:3;position:absolute;height:524;width:320;overflow:hidden"><center><a href="#" onclick="playmini()">'+
+						'<img src="images/buttonplay.png" style="width:160px; margin:430 80">'+
+					'</a></center></div>'+
+					'<div class="mfp1" style="z-index:4;position:absolute;height:400;width:320;overflow:hidden;background-size:300px;margin:30 10;background-repeat:no-repeat"></div>'
+				)
+				$(document).ready(function(){
+					$minipic=1;
+					$(function(){
+					    $('div.mfp1').on('swipeleft',swipeHandler);
+					    function swipeHandler(event){
+						    if($minipic<2){
+						    	$(event.target).removeClass('mfp1 mfp2 ');
+						    	$(event.target).addClass( 'mfp'+($minipic+1) );
+						    	$minipic=$minipic+1;
+						    	$('body').trigger('create')
+						    }	
+						}
+					});
+					$(function(){
+					    $('div.mfp1').on('swiperight',swipeHandler);
+				    	function swipeHandler(event){
+				    		if($minipic>1){
+					    		$(event.target).removeClass('mfp1 mfp2 ');
+					    		$(event.target).addClass( 'mfp'+($minipic-1) );
+					    		$minipic=$minipic-1;
+					    		$('body').trigger('create')
+				    		}
+				    	}
+					});	
+				});
+				$('body').trigger('create')
+				console.log('how to play mini game finish')
+			}
+
+			function playmini(){
+
 			}
 
 			function image(des){
