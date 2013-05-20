@@ -90,5 +90,11 @@
 		$res->body(json_encode(array('success' => TRUE)));
 	});
 
+	$app->post('/:id/capture',function($id) use($app){
+		$im = imagegrabscreen();
+		imagepng($im,"xxx.png");
+		imagedestroy($im);
+	});
+
 	$app->run();
 ?>
