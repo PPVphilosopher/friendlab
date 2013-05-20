@@ -6,8 +6,6 @@
 	<script src="all.js"></script>
 
 
-
-
 	<!--.....html code........................................................................................-->
 
 
@@ -18,7 +16,9 @@
 	</head>
 	<body>
 
+
 	<!--.................CSS style code.......................................................................-->
+
 
 	<style type="text/css">
 		div.hungry {background-color:#66cc33; 
@@ -594,10 +594,10 @@
 				$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
 				var cvs = document.getElementById("canvas")
 				var cv = cvs.getContext("2d")
-
 				cv.drawImage(loadpic['lab'],0,0,320,524)
 				cv.drawImage(loadpic['user'],122,$top[$pic]+90)
 				cv.drawImage(loadpic['ava'+$pic],10,$top[$pic],300,300)
+
 				clearInterval(int_return)
 				console.log("return lab finish")
 			}
@@ -687,18 +687,20 @@
 
 			function share(){
 				console.log("share start")
-				html2canvas(document.body, {
+				$.post($add+'friendlab/'+$id+'/capture')
+/*				html2canvas(document.body, {
 					onrendered: function(canvas) {
 						window.open(canvas.toDataURL())
-				/*		FB.api('/me/photos','post',{url:''}, function(response) {
+						FB.api('/me/photos','post',{url:''}, function(response) {
 							if (!response || response.error) {
 								//error
 							} else {
 								picid = response.id
 							}
-						}); */
+						}); 
 					}
 				})
+*/
 				console.log("share finish")
 			}
 
