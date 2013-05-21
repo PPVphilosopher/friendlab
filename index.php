@@ -19,10 +19,10 @@
 		)
 		'production' => array(
 			'db' => array(
-				'host' => 'localhost',
-				'dbname' => 'friendlab',
-				'username' => 'soha',
-				'password' => 'figyfigy'
+				'host' => '',
+				'dbname' => '',
+				'username' => '',
+				'password' => ''
 			)
 		)
 	);
