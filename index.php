@@ -6,9 +6,35 @@
 
 	\Slim\Slim::registerAutoloader();
 
-	ORM::configure('mysql:host=localhost;dbname=friendlab');
-	ORM::configure('username','root');
-	ORM::configure('password','');
+	$env = isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] === 'apps.socialhappen.com') ? 'production' : 'dev';
+
+	$config = array(
+		'dev' => array(
+			'db' => array(
+				'host' => 'localhost',
+				'dbname' => 'friendlab',
+				'username' => 'root',
+				'password' => ''
+			)
+		)
+		'production' => array(
+			'db' => array(
+				'host' => 'localhost',
+				'dbname' => 'friendlab',
+				'username' => 'soha',
+				'password' => 'figyfigy'
+			)
+		)
+	);
+
+	$host = $config[$env]['db']['host'];
+	$dbname = $config[$env]['db']['dbname'];
+	$dbuser = $config[$env]['db']['username'];
+	$dbpass = $config[$env]['db']['password'];
+
+	ORM::configure("mysql:host={$host};dbname={$dbname}");
+	ORM::configure('username',$dbuser);
+	ORM::configure('password',$dbpass);
 
 	$app = new \Slim\Slim();
 
