@@ -16,7 +16,7 @@
 				'username' => 'root',
 				'password' => ''
 			)
-		)
+		),
 		'production' => array(
 			'db' => array(
 				'host' => '',
