@@ -1,0 +1,373 @@
+</html><html>
+<link rel="stylesheet" href="jquery.mobile-1.3.1.min.css" />
+<script src="jquery-1.9.1.js"></script>
+<script src="jquery.mobile-1.3.1.min.js"></script>
+
+<head>
+	<style type="text/css">
+		
+		div.bg1{background-image:url(bg/minigameBG.jpg);
+			background-size:contain;
+			height: 517px;
+			z-index: 1;
+			position: absolute;										
+			padding-left: 100%;
+			background-repeat: no-repeat;}
+		div.bg2{background-image:url(bg/minigameBG02.png)
+			;background-size:contain;
+			height: 517px;
+			z-index: 3;
+			position: absolute;										
+			padding-left: 100%;
+			pointer-events:none;
+			background-repeat: no-repeat;}
+		div.tmon{z-index: 2;
+			position: absolute;									
+			background-size:cover;}
+		div.tmon2{z-index: 3;
+			position: absolute;									
+			background-size:cover;
+			margin: 445 0  0 0;
+			}
+		div.btime{background-image:url(images/minigameButton.png);
+			height: 58px;background-size: cover;}
+		div.non{background-image:url(images/non.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.mon1{background-image:url(images/mon1.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.mon2{background-image:url(images/mon2.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.mon3{background-image:url(images/mon3.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.mon4{background-image:url(images/mon4.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.boom1{background-image:url(images/boom1.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.boom2{background-image:url(images/boom2.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.boom3{background-image:url(images/boom3.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.boom4{background-image:url(images/boom4.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.doc{background-image:url(images/doc.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.docomg{background-image:url(images/docomg.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.timer{background-image:url(images/timer.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+		 div.plus3{background-image:url(images/plus3.png);
+		 	width: 80px;
+		 	height: 80px;
+		 	background-size: cover;}
+				
+</style>
+<!--......................................................................................................-->  	 
+		<title>
+			Friend Lab	
+		</title>
+	</head>
+		<body>
+		
+			<div data-theme="a" class="my-page" stlye="width:45px;">
+			
+					<div data-role="header">
+    						<span class="ui-title" >MonsterFriend</span>
+    				</div>
+    		</div>
+			
+<!--background..............................................................................................-->	
+	<div>
+		<div data-role="content" class="bg1" ></div>
+		<div data-role="content" class="bg2" ></div>
+		<div class="tmon" aling="left">
+			<table border="0" style="width: 300px;height: 400;margin: 15 0 0 15;table-layout: fixed;" >
+				<tr>
+					<td><div id="t1" class="non"></div></td>
+					<td><div id="t2" class="non"></div></td>
+					<td><div id="t3" class="non"></div></td>
+				</tr>
+				<tr>
+					<td><div id="t4" class="non"></div></td>
+					<td><div id="t5" class="non"></div></td>
+					<td><div id="t6" class="non"></div></td>
+					
+				</tr>
+				<tr>
+					<td><div id="t7" class="non"></div></td>
+					<td><div id="t8" class="non"></div></td>
+					<td><div id="t9" class="non"></div></td>
+					
+				</tr>
+				<tr>
+					<td><div id="t10" class="non"></div></td>
+					<td><div id="t11" class="non"></div></td>
+					<td><div id="t12" class="non"></div></td>
+					
+				</tr>
+			</table>
+		</div>
+<!--...............................................................................................-->
+<script>
+	$(document).ready(function(){
+		var status =[1,1,1,1,1,1,1,1,1,1,1,1];
+		$point=0;
+		$combo1=0; 
+		$combo2=0; 
+		$combo3=0; 
+		$combo4=0; 
+		count()
+		show()
+		show2()
+		show3()
+		show4()
+		showdoc()
+		plustime()
+		
+
+
+		$('.tmon').on('click', '.mon1', function() { 
+			$(this).addClass('boom1'); 
+			$(this).removeClass('mon1');
+			$('#point').html($point+=100);
+			if($combo2==0 && $combo3==0 && $combo4== 0){
+				$combo1++
+				console.log($combo1)
+				$('#combo').html("A"+ $combo1);}
+
+		})
+
+		$('.tmon').on('click', '.mon2', function() { 
+			$(this).addClass('boom2'); 
+			$(this).removeClass('mon2');
+			$('#point').html($point+=150)
+			if($combo1==0 && $combo3==0 && $combo4== 0){
+				$combo2++
+				console.log($combo2)
+				$('#combo').html("B"+$combo2);}
+		})
+
+		$('.tmon').on('click', '.mon3', function() { 
+			$(this).addClass('boom3'); 
+			$(this).removeClass('mon3');
+			$('#point').html($point+=200)
+			if($combo2==0 && $combo1==0 && $combo4== 0){
+				$combo3++
+				console.log($combo3)
+				$('#combo').html("C"+$combo3);}
+		})
+
+		$('.tmon').on('click', '.mon4', function() { 
+			$(this).addClass('boom4'); 
+			$(this).removeClass('mon4');
+			$('#point').html($point+=1000)
+			if($combo2==0 && $combo3==0 && $combo1== 0){
+				$combo4++
+				console.log($combo4)
+				$('#combo').html("D"+$combo4);}
+		})
+
+		$('.tmon').on('click', '.timer', function() { 
+			$(this).addClass('plus3'); 
+			$(this).removeClass('timer');
+			$("#time").html(clock+=3)
+			
+		})
+
+		$('.tmon').on('click', '.doc', function() { 
+			$(this).addClass('docomg'); 
+			$(this).removeClass('doc');
+			//$('#point').html($point-=1000)
+			if($combo1>0)$point=pcombo($combo1,100,$point),$combo1=0
+			if($combo2>0)$point=pcombo($combo2,150,$point),$combo2=0
+			if($combo3>0)$point=pcombo($combo3,200,$point),$combo3=0
+			if($combo4>0)$point=pcombo($combo4,500,$point),$combo4=0
+			$('#combo').html('Get')
+		}) 
+		
+			
+			
+			
+	});		
+//--------------funtion--------------------------------------------------------------------------				
+
+
+
+		function pcombo(combo,p,point){
+			if(combo<5) point=point+combo*p*1.25
+			if(combo<10)point=point+combo*p*1.5
+			if(combo<15)point=point+combo*p*1.75
+			if(combo<20)point=point+combo*p*2
+			if(combo<25)point=point+combo*p*2.25
+			if(combo<30)point=point+combo*p*2.5
+			if(combo<35)point=point+combo*p*2.75
+			if(combo>35)point=point+combo*p*3
+			$('#point').html(point)
+			return point
+
+		}
+
+		var clock = 60;
+		function count(){
+			clock-- 
+			if(clock>=0){
+				setTimeout(count,1000)
+			$('#time').html(clock)
+			}else{
+				if($combo1>0)$point=pcombo($combo1,100,$point)
+				if($combo2>0)$point=pcombo($combo2,150,$point)
+				if($combo3>0)$point=pcombo($combo3,200,$point)
+				if($combo4>0)$point=pcombo($combo4,500,$point)
+				$('#combo').html('Get')
+			}
+		}
+		
+		function show(){	
+			var appear = 1+Math.floor(Math.random()*12)
+			var time=1+Math.floor(Math.random()*5)
+			if(status[appear-1]!=0){
+				status[appear-1]=0
+				$('#t'+appear).html("<div class='mon1'></div>")
+				setTimeout(function(){
+					$('#t'+appear).html("<div class='non'></div>")
+					status[appear-1]=1
+				},3000)//หาย
+				if(clock>=5)setTimeout(show,time*300)	//ปรากฏ
+			}else{
+				show()
+			}
+		}
+		
+		function show2(){	
+			var appear = 1+Math.floor(Math.random()*12)
+			var time=1+Math.floor(Math.random()*5)
+			if(status[appear-1]!=0){
+				status[appear-1]=0
+				$('#t'+appear).html("<div class='mon2'></div>")
+				setTimeout(function(){
+					$('#t'+appear).html("<div class='non'></div>")
+					status[appear-1]=1
+					},3000)//หาย
+				if(clock>=3)setTimeout(show2,time*500)	//ปรากฏ
+			}else{
+				show2()
+			}
+		}
+		function show3(){	
+			var appear = 1+Math.floor(Math.random()*12)
+			var time=1+Math.floor(Math.random()*5)
+			if(status[appear-1]!=0){
+				status[appear-1]=0
+				$('#t'+appear).html("<div class='mon3'></div>")
+				setTimeout(function(){
+					$('#t'+appear).html("<div class='non'></div>")
+					status[appear-1]=1
+				},2500)//หาย
+				if(clock>=3)setTimeout(show3,time*800)	//ปรากฏ
+			}else{
+				show3()
+			}
+		}
+		function show4(){	
+			var appear = 1+Math.floor(Math.random()*12)
+			var time=1+Math.floor(Math.random()*5)
+			if(status[appear-1]!=0){
+				status[appear-1]=0
+				$('#t'+appear).html("<div class='mon4'></div>")
+				setTimeout(function(){
+					$('#t'+appear).html("<div class='non'></div>")
+					status[appear-1]=1
+				},2000)//หาย
+				if(clock>=3)setTimeout(show4,time*2000)	//ปรากฏ
+			}else{
+				show4()
+			}
+		}
+		function showdoc(){	
+			var appear = 1+Math.floor(Math.random()*12)
+			var time=1+Math.floor(Math.random()*3)
+			if(status[appear-1]!=0){
+				status[appear-1]=0
+				$('#t'+appear).html("<div class='doc'></div>")
+				setTimeout(function(){
+					$('#t'+appear).html("<div class='non'></div>")
+					status[appear-1]=1
+				},2500)//หาย
+				if(clock>=5)setTimeout(showdoc,time*1000)	//ปรากฏ
+			}else{
+				showdoc()
+			}
+		}
+		function plustime(){	
+			var appear = 1+Math.floor(Math.random()*12)
+			var time=1+Math.floor(Math.random()*4)
+			if(status[appear-1]!=0){
+				status[appear-1]=0
+				$('#t'+appear).html("<div class='timer'></div>")
+				setTimeout(function(){
+					$('#t'+appear).html("<div class='non'></div>")
+					status[appear-1]=1
+				},2000)//หาย
+				if(clock>=5)setTimeout(plustime,time*2000)	//ปรากฏ
+			}else{
+				plustime()
+			}
+		}
+
+</script>
+<!--...............................................................................................-->
+		<div class="tmon2" >
+			<table border="0" style="width:100%;background-color: rgba(0, 0, 0, 0.4);table-layout: fixed;">
+				<col width="15%">
+				<col width="40%">
+				<col width="45%">
+				<tr>
+					<td><div>
+		
+						</div>
+						<div> 
+							<div  style="text-align:center;font-size:15px;">Time</div> 
+							<div style="text-align:center;font-size:35px;" id="time">60</div>
+						</div>
+					</td>
+					<td>
+						<div  style="text-align:center;font-size:15px;">Combo</div> 
+						<div style="text-align:center;font-size:35px;" id="combo">0</div>
+
+						
+					</td>
+					<td >
+						<div  style="text-align:center;font-size:15px;">Totol Score</div> 
+						<div style="text-align:center;font-size:35px;" id="point">0</div>
+					</td>
+				
+				</tr>
+			</table>
+		</div>
+	
+	</div></body>
+	
+</html>
