@@ -1,5 +1,6 @@
 *.ai
 *.psd
+client
 
 # xcode noise
 ise
