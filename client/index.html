@@ -145,6 +145,7 @@
 		<script>
 
 			$add = 'http://localhost/'
+		//	$add = 'http://apps.socialhappen.com/'
 			$top = [180,200,220,180]	
 
 			$id = 0
@@ -175,7 +176,7 @@
 			window.fbAsyncInit = function() {
 				FB.init({
 					appId :'405891112842517', // App ID
-					channelUrl :'http://localhost/friendlab', // Channel File
+					channelUrl : $add+'friendlab', // Channel File
 					status :true, // check login status
 					cookie :true, // enable cookies to allow the server to access the session
 					xfbml :true // parse XFBML

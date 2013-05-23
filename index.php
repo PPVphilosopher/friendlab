@@ -19,10 +19,10 @@
 		),
 		'production' => array(
 			'db' => array(
-				'host' => '',
-				'dbname' => '',
-				'username' => '',
-				'password' => ''
+				'host' => 'http://www.figabyte.com',
+				'dbname' => 'friendlab',
+				'username' => 'friendlab',
+				'password' => 'guvuwhifipav'
 			)
 		)
 	);
