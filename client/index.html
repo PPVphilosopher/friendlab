@@ -3,7 +3,12 @@
 	<script src="jquery-1.9.1.js"></script>
 	<script src="html2canvas.js"></script>
 	<script src="jquery.mobile-1.3.1.min.js"></script>
-	<script src="all.js"></script>
+
+	<script src="assets/cordova-2.7.0.js"></script>
+	<!-- cordova facebook plugin -->
+	<script src="assets/cdv-plugin-fb-connect.js"></script>
+	<!-- facebook js sdk -->
+	<script src="assets/facebook_js_sdk.js"></script>
 
 
 	<!--.....html code........................................................................................-->
@@ -21,10 +26,10 @@
 
 
 	<style type="text/css">
-		div.hungry {background-color:#66cc33; 
-			height:2em; 
-			width:90%; 
-			color:#FFF; 
+		div.hungry {background-color:#66cc33;
+			height:2em;
+			width:90%;
+			color:#FFF;
 			text-align:center;
 			padding:5px auto;
 			-webkit-border-radius:10px;
@@ -35,7 +40,7 @@
 			line-height:35px;}
 		div.energy {background-color:#66cc33;
 			height:2em;width:90%;
-			color:#FFF; 
+			color:#FFF;
 			text-align:center;
 			-webkit-border-radius:10px;
 			-moz-border-radius:10px;
@@ -45,8 +50,8 @@
 			line-height:35px;}
 		div.clean  {background-color:#66cc33;
 			height:2em;
-			width:90%; 
-			color:#FFF; 
+			width:90%;
+			color:#FFF;
 			text-align:center;
 			-webkit-border-radius:10px;
 			-moz-border-radius:10px;
@@ -156,7 +161,7 @@
 			var int_decrease = setInterval(function(){},0)
 			var int_sleep = setInterval(function(){},0)
 			var int_return = setInterval(function(){},0)
-			
+
 			var loadpic = []
 			loadpic['ava0'] = image('images/images/b_01.png')
 			loadpic['ava1'] = image('images/images/b_02.png')
@@ -172,8 +177,53 @@
 
 		//..........facebook code..............................................................................
 
+		document.addEventListener('deviceready', function() {
 
+		var fbEventSubscribe = function() {
+			// Here we subscribe to the auth.authResponseChange JavaScript Event. This event is fired
+			// for any auth related change, such as login, logout or session refresh. This means that
+			// whenever someone who was previously logged out then logs in, the correct case below
+			// will be handled.
+			FB.Event.subscribe('auth.authResponseChange', function(response) {
+				// Here we specify what we do with the response anytime this event occurs.
+				if (response.status === 'connected') {
+					// The response object is returned with a status field that lets us know what the current
+					// login status of the person is. In this case, we're handling the situation where they
+					// have logged in to the app.
+					console.log('connected');
+					testAPI();
+				} else if (response.status === 'not_authorized') {
+					// In this case, the person is logged into Facebook, but not into the app, so we call
+					// FB.login() to prompt them to do so.
+					// In real-life usage, you wouldn't want to immediately prompt someone to login
+					// like this, for two reasons:
+					// (1) JavaScript created popup windows are blocked by most browsers unless they
+					// result from direct user interaction (such as a mouse click)
+					// (2) it is a bad experience to be continually prompted to login upon page load.
+					console.log('not_authorized');
+					FB.login();
+				} else {
+					// In this case, the person is not logged into Facebook, so we call the login()
+					// function to prompt them to do so. Note that at this stage there is no indication
+					// of whether they are logged into the app. If they aren't then they'll see the Login
+					// Dialog right after they login to Facebook.
+					// The same caveats as above apply to the FB.login() call here.
+					console.log('neither');
+					FB.login();
+				}
+			});
+		}
+
+		console.log(window.device);
+		if(window.device) {
+
+			console.log('Run on device/simulator');
+		  FB.init({ appId: '405891112842517', nativeInterface: CDV.FB, useCachedDialogs: false });
+		  fbEventSubscribe();
+		} else {
+			console.log('Run on browser');
 			window.fbAsyncInit = function() {
+				console.log('fbAsyncInit');
 				FB.init({
 					appId :'405891112842517', // App ID
 					channelUrl : $add+'friendlab', // Channel File
@@ -181,39 +231,10 @@
 					cookie :true, // enable cookies to allow the server to access the session
 					xfbml :true // parse XFBML
 				});
-				// Here we subscribe to the auth.authResponseChange JavaScript Event. This event is fired
-				// for any auth related change, such as login, logout or session refresh. This means that
-				// whenever someone who was previously logged out then logs in, the correct case below
-				// will be handled.
-				FB.Event.subscribe('auth.authResponseChange', function(response) {
-					// Here we specify what we do with the response anytime this event occurs.
-					if (response.status === 'connected') {
-						// The response object is returned with a status field that lets us know what the current
-						// login status of the person is. In this case, we're handling the situation where they
-						// have logged in to the app.
-						console.log('connected');
-						testAPI();
-					} else if (response.status === 'not_authorized') {
-						// In this case, the person is logged into Facebook, but not into the app, so we call
-						// FB.login() to prompt them to do so.
-						// In real-life usage, you wouldn't want to immediately prompt someone to login
-						// like this, for two reasons:
-						// (1) JavaScript created popup windows are blocked by most browsers unless they
-						// result from direct user interaction (such as a mouse click)
-						// (2) it is a bad experience to be continually prompted to login upon page load.
-						console.log('not_authorized');
-						FB.login();
-					} else {
-						// In this case, the person is not logged into Facebook, so we call the login()
-						// function to prompt them to do so. Note that at this stage there is no indication
-						// of whether they are logged into the app. If they aren't then they'll see the Login
-						// Dialog right after they login to Facebook.
-						// The same caveats as above apply to the FB.login() call here.
-						console.log('neither');
-						FB.login();
-					}
-				});
+
+				fbEventSubscribe();
 			};
+		}
 			// Load the SDK Asynchronously
 			(function(d){
 				var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -222,6 +243,7 @@
 				js.src = "all.js";
 				ref.parentNode.insertBefore(js, ref);
 			}(document));
+		});
 			// Here we are just running a very simple test of the Graph API after login is successful.
 			// This testAPI() function is only called in those cases.
 			function testAPI() {
@@ -234,7 +256,7 @@
 					$('#stl').css({'margin':'337 190'})
 					$('#btl').html('<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
 						'<a href"#" onclick="init()"><img src="GRAPHIC/facebookas.png" style="width:210;height:70;margin:0 55"></a>'+
-						'<a href"#" onclick="diff()"><img src="GRAPHIC/facebookdiff.png" style="width:210;height:70;margin:20 55"></a>'						
+						'<a href"#" onclick="diff()"><img src="GRAPHIC/facebookdiff.png" style="width:210;height:70;margin:20 55"></a>'
 					)
 					$('body').trigger('create')
 				});
@@ -890,7 +912,7 @@
 								$(event.target).addClass( 'mfp'+($minipic+1) );
 								$minipic=$minipic+1;
 								$('body').trigger('create')
-							}	
+							}
 						}
 					});
 					$(function(){
@@ -903,7 +925,7 @@
 								$('body').trigger('create')
 							}
 						}
-					});	
+					});
 				});
 				$('body').trigger('create')
 				console.log('how to play mini game finish')
@@ -968,10 +990,10 @@
 					var status =[1,1,1,1,1,1,1,1,1,1,1,1];
 					clock = 60;
 					$point=0;
-					$combo1=0; 
-					$combo2=0; 
-					$combo3=0; 
-					$combo4=0; 
+					$combo1=0;
+					$combo2=0;
+					$combo3=0;
+					$combo4=0;
 					timecount()
 					show()
 					show2()
@@ -979,9 +1001,9 @@
 					show4()
 					showdoc()
 					plustime()
-					
-					$('.tmon').on('click', '.mon1', function() { 
-						$(this).addClass('boom1'); 
+
+					$('.tmon').on('click', '.mon1', function() {
+						$(this).addClass('boom1');
 						$(this).removeClass('mon1');
 						$('#point').html($point+=100);
 						if($combo2==0 && $combo3==0 && $combo4== 0){
@@ -990,8 +1012,8 @@
 							$('#combo').html("A"+ $combo1);}
 					})
 
-					$('.tmon').on('click', '.mon2', function() { 
-						$(this).addClass('boom2'); 
+					$('.tmon').on('click', '.mon2', function() {
+						$(this).addClass('boom2');
 						$(this).removeClass('mon2');
 						$('#point').html($point+=150)
 						if($combo1==0 && $combo3==0 && $combo4== 0){
@@ -1000,8 +1022,8 @@
 							$('#combo').html("B"+$combo2);}
 					})
 
-					$('.tmon').on('click', '.mon3', function() { 
-						$(this).addClass('boom3'); 
+					$('.tmon').on('click', '.mon3', function() {
+						$(this).addClass('boom3');
 						$(this).removeClass('mon3');
 						$('#point').html($point+=200)
 						if($combo2==0 && $combo1==0 && $combo4== 0){
@@ -1010,8 +1032,8 @@
 							$('#combo').html("C"+$combo3);}
 					})
 
-					$('.tmon').on('click', '.mon4', function() { 
-						$(this).addClass('boom4'); 
+					$('.tmon').on('click', '.mon4', function() {
+						$(this).addClass('boom4');
 						$(this).removeClass('mon4');
 						$('#point').html($point+=1000)
 						if($combo2==0 && $combo3==0 && $combo1== 0){
@@ -1020,14 +1042,14 @@
 							$('#combo').html("D"+$combo4);}
 					})
 
-					$('.tmon').on('click', '.timer', function() { 
-						$(this).addClass('plus3'); 
+					$('.tmon').on('click', '.timer', function() {
+						$(this).addClass('plus3');
 						$(this).removeClass('timer');
 						$("#time").html(clock+=3)
 					})
 
-					$('.tmon').on('click', '.doc', function() { 
-						$(this).addClass('docomg'); 
+					$('.tmon').on('click', '.doc', function() {
+						$(this).addClass('docomg');
 						$(this).removeClass('doc');
 						//$('#point').html($point-=1000)
 						if($combo1>0)$point=pcombo($combo1,100,$point),$combo1=0
@@ -1092,7 +1114,7 @@
 			}
 
 			function timecount(){
-				clock-- 
+				clock--
 				if(clock>=0){
 					setTimeout(timecount,1000)
 				$('#time').html(clock)
@@ -1105,8 +1127,8 @@
 					setTimeout(function(){show_score($point)},3000)
 				}
 			}
-			
-			function show(){	
+
+			function show(){
 				var appear = 1+Math.floor(Math.random()*12)
 				var time=1+Math.floor(Math.random()*5)
 				if(status[appear-1]!=0){
@@ -1121,8 +1143,8 @@
 					show()
 				}
 			}
-			
-			function show2(){	
+
+			function show2(){
 				var appear = 1+Math.floor(Math.random()*12)
 				var time=1+Math.floor(Math.random()*5)
 				if(status[appear-1]!=0){
@@ -1138,7 +1160,7 @@
 				}
 			}
 
-			function show3(){	
+			function show3(){
 				var appear = 1+Math.floor(Math.random()*12)
 				var time=1+Math.floor(Math.random()*5)
 				if(status[appear-1]!=0){
@@ -1154,7 +1176,7 @@
 				}
 			}
 
-			function show4(){	
+			function show4(){
 				var appear = 1+Math.floor(Math.random()*12)
 				var time=1+Math.floor(Math.random()*5)
 				if(status[appear-1]!=0){
@@ -1170,7 +1192,7 @@
 				}
 			}
 
-			function showdoc(){	
+			function showdoc(){
 				var appear = 1+Math.floor(Math.random()*12)
 				var time=1+Math.floor(Math.random()*3)
 				if(status[appear-1]!=0){
@@ -1186,7 +1208,7 @@
 				}
 			}
 
-			function plustime(){	
+			function plustime(){
 				var appear = 1+Math.floor(Math.random()*12)
 				var time=1+Math.floor(Math.random()*4)
 				if(status[appear-1]!=0){
