@@ -552,7 +552,7 @@
 								'<td align="right">'+
 									'<div>'+
 										'<a href="#" onclick="share()"><img src="images/sharebutton.png" style="height:25px;"></a>'+
-										'<form method="POST" enctype="multipart/form-data" action="save.php" id="myForm">'+
+										'<form method="POST" action="'+$add+'friendlab/save.php" id="myForm">'+
 										 	'<input type="hidden" name="img_val" id="img_val" value="" />'+
 										'</form>'+
 									'</div>'+
@@ -761,7 +761,10 @@
 						$('#img_val').val(canvas.toDataURL("image/png"));
 						document.getElementById("myForm").submit();
 
-						//$.post("save.php", {data: canvas.toDataURL("image/png")})
+	//					$.post("save.php", {data: canvas.toDataURL("image/png")}).response(function(e){
+	//						var q = JSON.parse(e.responseText)
+	//						console.log(q);
+	//					})
 
 						FB.api('/me/photos','post',{url:''}, function(response) {
 							if (!response || response.error) {
