@@ -119,7 +119,7 @@
 	$app->post('/:id/capture',function($id) use($app){
 		$im = imagegrabscreen();
 		imagepng($im,"/share_image/" . $id . ".png");
-		$url = "http://app.socialhappen.com/friendlab/share_image/" . $id . ".png";
+		$url = "http://apps.socialhappen.com/friendlab/share_image/" . $id . ".png";
 
 		$app_id = "405891112842517";
 		$app_secret = "433a6313167f3ec12db2f9b87e693566";
