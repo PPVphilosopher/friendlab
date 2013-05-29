@@ -119,7 +119,7 @@
 	$app->post('/:id/capture',function($id) use($app){
 		$im = imagegrabscreen();
 		imagepng($im,"/share_image/"$id+".png");
-		$url = "http://app.socialhappen.com/friendlab/share_image/"+$id+".png";
+		$url = "http://app.socialhappen.com/friendlab/share_image/" . $id . ".png";
 
 		$app_id = "405891112842517";
 		$app_secret = "433a6313167f3ec12db2f9b87e693566";
@@ -138,7 +138,7 @@
 			$access_token = $params['access_token'];
 
 			// Show photo upload form to user and post to the Graph URL
-			$graph_url= "https://graph.facebook.com/"+$id+"/photos?" . "url=" . urlencode($url) . "&method=POST" . "&access_token=" .$access_token;
+			$graph_url= "https://graph.facebook.com/" . $id . "/photos?" . "url=" . urlencode($url) . "&method=POST" . "&access_token=" .$access_token;
 
 		}
 		imagedestroy($im);
