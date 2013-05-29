@@ -10,6 +10,8 @@
 	<!-- facebook js sdk -->
 	<script src="assets/facebook_js_sdk.js"></script>
 
+	<script type='application/javascript' src='/path/to/fastclick.js'></script>
+
 
 	<!--.....html code........................................................................................-->
 
@@ -19,7 +21,7 @@
 			Friend Lab
 		</title>
 	</head>
-	<body>
+	<body style="-webkit-user-select:none">
 
 
 	<!--.................CSS style code.......................................................................-->
@@ -60,32 +62,37 @@
 			vertical-align:middle;
 			line-height:35px;}
 		div.bg1{background-image:url(bg/lab02.jpg);
-			height:524px;
+			height:436px;
 			width:320px;
-			background-size:cover;}
-		div.htp1.r1{background-image:url(images/rhtp1.png);width:300px;
-			height:380px;
 			background-size:cover;
-			margin-top:-15px;
-			margin-left:10px;
+			background-position:bottom;}
+		div.htp1.r1{background-image:url(images/rhtp1.png);
+			width:280px;
+			height:360;
+			background-size:cover;
+			margin-top:-10px;
+			margin-left:20px;
 			background-repeat:no-repeat;}
-		div.htp1.r2{background-image:url(images/rhtp2.png);width:300px;
-			height:380px;
+		div.htp1.r2{background-image:url(images/rhtp2.png);
+			width:280px;
+			height:360;
 			background-size:cover;
-			margin-top:-15px;
-			margin-left:10px;
+			margin-top:-10px;
+			margin-left:20px;
 			background-repeat:no-repeat;}
-		div.htp1.r3{background-image:url(images/rhtp3.png);width:300px;
-			height:380px;
+		div.htp1.r3{background-image:url(images/rhtp3.png);
+			width:280px;
+			height:360;
 			background-size:cover;
-			margin-top:-15px;
-			margin-left:10px;
+			margin-top:-10px;
+			margin-left:20px;
 			background-repeat:no-repeat;}
-		div.htp1.r4{background-image:url(images/rhtp4.png);width:300px;
-			height:380px;
+		div.htp1.r4{background-image:url(images/rhtp4.png);
+			width:280px;
+			height:360;
 			background-size:cover;
-			margin-top:-15px;
-			margin-left:10px;
+			margin-top:-10px;
+			margin-left:20px;
 			background-repeat:no-repeat;}
 		div.mfp1{background-image:url(images/mfp1.png);}
 		div.mfp2{background-image:url(images/mfp2.png);}
@@ -149,10 +156,11 @@
 	<div id="fb-root">
 		<script>
 
+
 			$add = 'http://apps.socialhappen.com/'
 			// $add = 'http://localhost/'
-			$top = [180,200,220,180]
-			
+			$top = [90,110,130,90]
+
 			$id = 0
 			$pic = 0
 			$avaid = 0
@@ -201,7 +209,7 @@
 					// result from direct user interaction (such as a mouse click)
 					// (2) it is a bad experience to be continually prompted to login upon page load.
 					console.log('not_authorized');
-					FB.login();
+					// FB.login();
 				} else {
 					// In this case, the person is not logged into Facebook, so we call the login()
 					// function to prompt them to do so. Note that at this stage there is no indication
@@ -209,7 +217,7 @@
 					// Dialog right after they login to Facebook.
 					// The same caveats as above apply to the FB.login() call here.
 					console.log('neither');
-					FB.login();
+					// FB.login();
 				}
 			});
 		}
@@ -253,10 +261,10 @@
 					$('#content').css({'background-image':'url(bg/lab1x.jpg)'})
 					$id = response.id
 					$('#stl').html('<a href"#" onclick="init()"><img src="https://graph.facebook.com/'+$id+'/picture?type=square" style="width:40;height:40"></a>')
-					$('#stl').css({'margin':'337 190'})
-					$('#btl').html('<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
-						'<a href"#" onclick="init()"><img src="GRAPHIC/facebookas.png" style="width:210;height:70;margin:0 55"></a>'+
-						'<a href"#" onclick="diff()"><img src="GRAPHIC/facebookdiff.png" style="width:210;height:70;margin:20 55"></a>'
+					$('#stl').css({'margin':'268 190'})
+					$('#btl').html('<img src="GRAPHIC/logoapp.png" style="width:260;height:180;margin:5 30">'+
+						'<a href"#" onclick="init()"><img src="GRAPHIC/facebookas.png" style="width:210;height:70;margin:60 55"></a>'+
+						'<a href"#" onclick="diff()"><img src="GRAPHIC/facebookdiff.png" style="width:210;height:70;margin:-50 55"></a>'
 					)
 					$('body').trigger('create')
 				});
@@ -264,10 +272,16 @@
 
 			function diff(){
 				FB.logout()
+				console.log("Log out");
 				$('#stl').css({'margin':'0 0'})
-				$('#stl').html('<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
-						'<a href"#" onclick="FB.login(function(){},{scope:\'publish_stream\'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:0 55"></a>')
-				$('#btl').html()
+				$('#btl').html('<img src="GRAPHIC/logoapp.png" style="width:260;height:180;margin:5 30">'+
+						'<a href"#" onclick="signin()"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:60 55"></a>')
+				$('#stl').html('')
+			}
+
+			function signin(){
+				console.log('log in');
+				FB.login(function(){},{scope:'publish_stream'})
 			}
 
 
@@ -293,40 +307,12 @@
 				console.log('how to play start')
 				$('#mhead').html('How to play')
 				$('#stl').html(
-					'<table border=\'0\' width="100%">'+
-						'<col width="10%">'+
-						'<col width="30%">'+
-						'<col width="30%">'+
-						'<col width="30%">'+
-						'<tr>'+
-							'<td><img src="images/frlab_15.png" style="height:38;"></td>'+
-							'<td bgcolor=\'#000\' style="-webkit-border-radius:15px;-moz-border-radius:15px; border-radius:15px;"><div class=\'hungry\'>Hungry</div></td>'+
-							'<td bgcolor=\'#000\' style="-webkit-border-radius:15px;-moz-border-radius:15px; border-radius:15px;"><div class=\'energy\'>Energy</div></td>'+
-							'<td bgcolor=\'#000\'style="-webkit-border-radius:15px;-moz-border-radius:15px; border-radius:15px;"> <div class=\'clean\'>Clean</div></td>'+
-						'</tr>'+
-					'</table>'+
-					'<div>'+
-						'<table width="100%">'+
-							'<tr>'+
-								'<td>'+
-									'<div>'+
-										'<img src="images/gold.png" style="height:30px;">100'+
-									'</div>'+
-								'</td> '+
-								'<td align="right">'+
-									'<div>'+
-										'<img src="images/sharebutton.png" style="height:25px;">'+
-									'</div>'+
-								'</td>'+
-							'</tr>'+
-						'</table>'+
-					'</div>'+
-					'<div id="page1">'+
+					'<div id="page1" style="margin-top:5">'+
 						'<div class="htp1 r1"></div>'+
 					'</div>'+
 					'<div align=center>'+
 						'<a href="#" onclick="new_char()">'+
-							'<img src="images/buttonplay.png" style="height:53px;margin-top:12px;">'+
+							'<img src="images/buttonplay.png" style="height:50px;margin-top:5px;">'+
 						'</a>'+
 					'</div>'
 				)
@@ -366,11 +352,9 @@
 				$('#stl').html('')
 				$('#content').css({'background-image':'url(bg/lab01.jpg)'})
 				$('#ctl').html(
-					'<div style="width:300px;height:500px;background-image:url(bg/newchar.png);background-size:cover;margin:10">'+
-						'<img src=images/fr.png style="width:250;height:50;margin:15 25">'+
-						'<div id="list" align=center style="width:250px;height:400px;background-image:url(bg/newcharbox.png);background-size:cover;overflow:auto;margin:-10 25">'+
-							''+
-						'</div>'+
+					'<div style="width:240px;height:400px;background-image:url(bg/newchar.png);background-size:cover;margin:8 40">'+
+						'<img src=images/fr.png style="width:200;height:40;margin:12 20">'+
+						'<div id="list" align=center style="width:200px;height:320px;background-image:url(bg/newcharbox.png);background-size:cover;overflow:auto;margin:-8 20"></div>'+
 					'</div>'
 				)
 				FB.api('/me/friends', function(res) {
@@ -393,7 +377,7 @@
 				console.log('select '+xid+' start')
 				FB.api('/'+xid,function(res){
 					$('#stl').html(
-						'<div style="background-image:url(bg/sel.png);background-size:cover;width:320px;height:524px;position:absolute" align=center>'+
+						'<div style="background-image:url(bg/sel.png);background-size:cover;width:320px;height:436px;position:absolute" align=center>'+
 							'<br><h1>Your selection is</h1><br>'+
 							'<img src="https://graph.facebook.com/'+xid+'/picture?width=100&height=100"><br>'+
 							'<h2>'+res.name+'</h2><br>'+
@@ -425,36 +409,36 @@
 				clear()
 				$('#mhead').html('New character')
 				$('#stl').html(
-					'<img src=images/choose.png style="width:300;margin:10 10">'+
-					'<img src=images/setA.png style="width:80;margin-left:10">'+
+					'<img src=images/choose.png style="width:240;margin:5 50">'+
+					'<img src=images/setA.png style="width:60;margin-left:10">'+
 					'<div align="center">'+
 						'<form>'+
 							'<fieldset data-role="controlgroup" data-type="horizontal">'+
 								'<input type="radio" data-theme="a" name="setA" id="mix1" value=1 checked="checked">'+
-								'<label for="mix1"><img src="images/set1-mix1.png" style="height:120px;"></label>'+
+								'<label for="mix1"><img src="images/set1-mix1.png" style="height:100px;"></label>'+
 								'<input type="radio" data-theme="a" name="setA" id="mix2" value=2>'+
-								'<label for="mix2"><img src="images/set1-mix2.png" style="height:120px;"></label>'+
+								'<label for="mix2"><img src="images/set1-mix2.png" style="height:100px;"></label>'+
 								'<input type="radio" data-theme="a" name="setA" id="mix3" value=3>'+
-								'<label for="mix3"><img src="images/set1-mix3.png" style="height:120px;"></label>'+
+								'<label for="mix3"><img src="images/set1-mix3.png" style="height:100px;"></label>'+
 							'</fieldset>'+
 						'</form>'+
 					'</div>'+
-					'<img src=images/setB.png style="width:80;margin-left:10">'+
+					'<img src=images/setB.png style="width:60;margin-left:10">'+
 					'<div align="center">'+
 						'<form>'+
 							'<fieldset data-role="controlgroup" data-type="horizontal">'+
 								'<input type="radio" data-theme="a" name="setB" id="mix1" value=1 checked="checked">'+
-								'<label for="mix1"><img src="images/set2-mix1.png" style="height:60px;"></label>'+
+								'<label for="mix1"><img src="images/set2-mix1.png" style="height:50px;"></label>'+
 								'<input type="radio" data-theme="a" name="setB" id="mix2" value=2>'+
-								'<label for="mix2"><img src="images/set2-mix2.png" style="height:60px;"></label>'+
+								'<label for="mix2"><img src="images/set2-mix2.png" style="height:50px;"></label>'+
 								'<input type="radio" data-theme="a" name="setB" id="mix3" value=3>'+
-								'<label for="mix3"><img src="images/set2-mix3.png" style="height:60px;"></label>'+
+								'<label for="mix3"><img src="images/set2-mix3.png" style="height:50px;"></label>'+
 							'</fieldset>'+
 						'</form>'+
 					'</div>'+
 					'<div align="right">'+
 						'<a href="#" onclick="new_char2()">'+
-							'<img src="images/Buttonnext.png" style="height:53px;margin:12 10;">'+
+							'<img src="images/Buttonnext.png" style="height:40px;margin:5 10;">'+
 						'</a>'+
 					'</div>'
 				)
@@ -469,9 +453,9 @@
 				var a = $("input:radio[name='setA']:checked").val()
 				var b = $("input:radio[name='setB']:checked").val()
 				$('#stl').html(
-					'<div id="mix0" style="width:320;height:524;overflow:hidden;position:absolute;z-index:3"></div>'+
-					'<div id="mix1" style="width:320;height:524;overflow:hidden;position:absolute;z-index:2"></div>'+
-					'<div id="mix2" style="width:320;height:524;overflow:hidden;position:absolute;z-index:1"></div>'
+					'<div id="mix0" style="width:320;height:436;overflow:hidden;position:absolute;z-index:3"></div>'+
+					'<div id="mix1" style="width:320;height:436;overflow:hidden;position:absolute;z-index:2"></div>'+
+					'<div id="mix2" style="width:320;height:436;overflow:hidden;position:absolute;z-index:1"></div>'
 				)
 				$('#mix0').html('<img src=images/boom.png id="mix" style="width:0;margin-top:220;margin-left:160">')
 				$('#mix1').html('<img src=images/set2-mix'+b+'.png id="mixB" style="margin:150 320">')
@@ -484,7 +468,7 @@
 					setTimeout(function(){
 						$('#mix').animate({width:"+=320px",marginLeft:"-=160px",marginTop:"-=100px"},500)
 						setTimeout(function(){
-							$('#mix1').html('<img src=bg/white.png style="width:320;height:524" id="white">')
+							$('#mix1').html('<img src=bg/white.png style="width:320;height:436" id="white">')
 							$('#mix').fadeOut(2000)
 							$('#white').fadeIn(2000,new_char3())
 						},500)
@@ -495,7 +479,7 @@
 
 			function new_char3(){
 				console.log('new char3 start')
-				$('#mix0').html('<img src=bg/white.png style="width:320;height:524" id="white">')
+				$('#mix0').html('<img src=bg/white.png style="width:320;height:436" id="white">')
 				$('#mix1').html('<img id="xxx" src=images/images/b_0'+($pic+1)+'.png style="width:300;margin:'+($top[$pic]-100)+' 10">')
 				$('#mix2').html('<img id="yyy" src=https://graph.facebook.com/'+$avaid+'/picture?width=76&height=76 style="margin:'+($top[$pic]-10)+' 122">')
 				$('#xxx').animate({marginTop:"+=100px"},2000)
@@ -517,7 +501,7 @@
 			function draw_main(){
 				console.log("draw_main start")
 				$('#content').html('<div id="stl" style=\'position:absolute;z-index:5\'>'+
-						'<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">'+
+						'<img src="GRAPHIC/logoapp.png" style="width:260;height:180;margin:5 30">'+
 						'<a href"#" onclick="FB.login(function(){},{scope:\'read_friendlists\'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:0 55"></a>'+
 					'</div>'+
 					'<div id="btl" style=\'position:absolute;z-index:4\'></div>'+
@@ -573,7 +557,7 @@
 						'</table>'+
 					'</div>'
 				)
-				$('#btl').css({'margin-top':'460','margin-left':'20'})
+				$('#btl').css({'margin-top':'360','margin-left':'20'})
 				$('#btl').html(
 				'<table>'+
 					'<tr>'+
@@ -589,7 +573,7 @@
 					'</tr>'+
 				'</table>'
 				)
-				$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+				$('#ctl').html('<canvas id="canvas" width="320" height="436"></canvas>')
 
 				init_main()
 				console.log("draw_main finish")
@@ -636,7 +620,7 @@
 
 			function dead(){
 				console.log('dead start')
-				$('#content').append('<div id="deadwindow" style="position:absolute;z-index:100;height:524;width:320;background-image:url(\'bg/dead.png\');background-size:contain"><a href="#" onclick="kill_a()"><img src=images/deadcaption.png style="margin:100 10"></a></div>')
+				$('#content').append('<div id="deadwindow" style="position:absolute;z-index:100;height:436;width:320;background-image:url(\'bg/dead.png\');background-size:contain"><a href="#" onclick="kill_a()"><img src=images/deadcaption.png style="margin:100 10"></a></div>')
 				console.log('dead finish')
 			}
 
@@ -649,7 +633,7 @@
 
 			function kill_b(){
 				console.log('kill b start')
-				$('#content').append('<div id="deadwindow" style="text-align:center;position:absolute;z-index:100;height:524;width:320;background-image:url(\'bg/dead.png\');background-size:contain">'+
+				$('#content').append('<div id="deadwindow" style="text-align:center;position:absolute;z-index:100;height:436;width:320;background-image:url(\'bg/dead.png\');background-size:contain">'+
 						'<img src=images/dead.png style="margin:30 60">'+
 						'<h3>Do you want to kill your friend?</h3>'+
 						'<a href="#" onclick="kill_a()"><img src=images/yes.png style="width:100"></a>'+
@@ -671,10 +655,10 @@
 			function rt(){
 				console.log("return lab start")
 
-				$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+				$('#ctl').html('<canvas id="canvas" width="320" height="436"></canvas>')
 				var cvs = document.getElementById("canvas")
 				var cv = cvs.getContext("2d")
-				cv.drawImage(loadpic['lab'],0,0,320,524)
+				cv.drawImage(loadpic['lab'],0,-88,320,524)
 				cv.drawImage(loadpic['user'],122,$top[$pic]+90)
 				cv.drawImage(loadpic['ava'+$pic],10,$top[$pic],300,300)
 
@@ -687,13 +671,13 @@
 				$.get($add+'friendlab/'+$id+'/status').complete(function(e){
 					var q = JSON.parse(e.responseText)
 					if(q.sleep==1){
-						$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+						$('#ctl').html('<canvas id="canvas" width="320" height="436"></canvas>')
 						var cvs = document.getElementById("canvas")
 						var cv = cvs.getContext("2d")
 
 						cv.drawImage(loadpic['bed1'],-80,-131,480,786)
-						cv.drawImage(loadpic['user'],122,$top[$pic]-30)
-						cv.drawImage(loadpic['ava'+$pic],10,$top[$pic]-120,300,300)
+						cv.drawImage(loadpic['user'],122,$top[$pic]+60)
+						cv.drawImage(loadpic['ava'+$pic],10,$top[$pic]-30,300,300)
 						cv.drawImage(loadpic['bed2'],-80,-81,480,786)
 
 						if(q.energy<100)q.energy = parseInt(q.energy,10)+1
@@ -791,16 +775,16 @@
 						int_decrease = setInterval(decrease,900000)
 						clearInterval(int_sleep)
 						clearInterval(int_return)
-						int_return = setInterval(rt,10000)
+						int_return = setInterval(rt,5000)
 
-						$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+						$('#ctl').html('<canvas id="canvas" width="320" height="436"></canvas>')
 						var cvs = document.getElementById("canvas")
 						var cv = cvs.getContext("2d")
 
-						cv.drawImage(loadpic['kit1'],0,0,320,524)
+						cv.drawImage(loadpic['kit1'],0,-88,320,524)
 						cv.drawImage(loadpic['user'],122,$top[$pic]+30)
 						cv.drawImage(loadpic['ava'+$pic],10,$top[$pic]-60,300,300)
-						cv.drawImage(loadpic['kit2'],0,0,320,524)
+						cv.drawImage(loadpic['kit2'],0,-88,320,524)
 
 						q.gold = parseInt(q.gold,10)-20
 						q.hungry = parseInt(q.hungry,10)+20+Math.floor(Math.random()*6)
@@ -820,14 +804,14 @@
 					if(q.energy<=50&&q.sleep==0){
 						clearInterval(int_return)
 
-						$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+						$('#ctl').html('<canvas id="canvas" width="320" height="436"></canvas>')
 						var cvs = document.getElementById("canvas")
 						var cv = cvs.getContext("2d")
 
-						cv.drawImage(loadpic['bed1'],0,0,320,524)
+						cv.drawImage(loadpic['bed1'],0,-88,320,524)
 						cv.drawImage(loadpic['user'],122,$top[$pic]+90)
 						cv.drawImage(loadpic['ava'+$pic],10,$top[$pic],300,300)
-						cv.drawImage(loadpic['bed2'],0,-60,320,524)
+						cv.drawImage(loadpic['bed2'],0,-60,320,436)
 
 						q.sleep = 1
 						post(q)
@@ -847,16 +831,16 @@
 						int_decrease = setInterval(decrease,900000)
 						clearInterval(int_sleep)
 						clearInterval(int_return)
-						int_return = setInterval(rt,10000)
+						int_return = setInterval(rt,5000)
 
-						$('#ctl').html('<canvas id="canvas" width="320" height="524"></canvas>')
+						$('#ctl').html('<canvas id="canvas" width="320" height="436"></canvas>')
 						var cvs = document.getElementById("canvas")
 						var cv = cvs.getContext("2d")
 
-						cv.drawImage(loadpic['bth1'],0,0,320,524)
+						cv.drawImage(loadpic['bth1'],0,-88,320,524)
 						cv.drawImage(loadpic['user'],122,$top[$pic]+30)
 						cv.drawImage(loadpic['ava'+$pic],10,$top[$pic]-60,300,300)
-						cv.drawImage(loadpic['bth2'],0,0,320,524)
+						cv.drawImage(loadpic['bth2'],0,-88,320,524)
 
 						q.clean = parseInt(q.clean,10)+20+Math.floor(Math.random()*31)
 						if(q.clean>100)q.clean=100
@@ -895,12 +879,12 @@
 				$('#lhead').html('')
 				$('#rhead').html('')
 				$('#stl').html(
-					'<div class="minibg1" style="background-image:url(bg/minigameBG.jpg);background-size:contain;z-index:1;position:absolute;height:524;width:320;overflow:hidden"></div>'+
-					'<div class="minibg2" style="background-image:url(bg/minigameBG02.png);background-size:contain;z-index:2;position:absolute;height:524;width:320;overflow:hidden"></div>'+
-					'<div style="z-index:3;position:absolute;height:524;width:320;overflow:hidden"><center><a href="#" onclick="playmini()">'+
-						'<img src="images/buttonplay.png" style="width:160px; margin:430 80">'+
-					'</a></center></div>'+
-					'<div class="mfp1" style="z-index:4;position:absolute;height:400;width:320;overflow:hidden;background-size:300px;margin:30 10;background-repeat:no-repeat"></div>'
+					'<div class="minibg1" style="background-image:url(bg/minigameBG.jpg);background-size:cover;background-position:top;z-index:1;position:absolute;height:436;width:320;overflow:hidden"></div>'+
+					'<div class="minibg2" style="background-image:url(bg/minigameBG02.png);background-size:cover;background-position:top;z-index:2;position:absolute;height:436;width:320;overflow:hidden"></div>'+
+					'<div style="z-index:3;position:absolute;height:436;width:320;overflow:hidden"><center><a href="#" onclick="playmini()">'+
+						'<div class="mfp1" style="height:320;width:300;overflow:hidden;background-size:300px;margin:10 10;background-repeat:no-repeat"></div>'+
+						'<img src="images/buttonplay.png" style="width:160px; margin:0 80">'+
+					'</a></center></div>'
 				)
 				$(document).ready(function(){
 					$minipic=1;
@@ -935,9 +919,10 @@
 				console.log('play mini game start')
 				clear()
 				$('#fnl').html(
-					'<div style="width:320;height:524;background-image:url(bg/minigameBG.jpg);padding-left:100%;background-size:contain;z-index:1;position:absolute;background-repeat:no-repeat;overflow:hidden"></div>'+
-					'<div style="width:320;height:524;background-image:url(bg/minigameBG02.png);padding-left:100%;background-size:contain;z-index:3;position:absolute;background-repeat:no-repeat;overflow:hidden;pointer-events:none;"></div>'+
-					'<div aling="left" class="tmon" style="z-index:2;position:absolute;width:320;height:524;overflow:hidden">'+
+					'<div id="showcombo" style="width:320;margin-top:160;color:red;position:absolute;z-index:9;text-align:center;pointer-events:none;"></div>'+
+					'<div style="width:320;height:436;background-image:url(bg/minigameBG.jpg);padding-left:100%;background-size:cover;z-index:1;position:absolute;background-repeat:no-repeat;overflow:hidden"></div>'+
+					'<div style="width:320;height:436;background-image:url(bg/minigameBG02.png);padding-left:100%;background-size:cover;z-index:3;position:absolute;background-repeat:no-repeat;overflow:hidden;pointer-events:none;"></div>'+
+					'<div aling="left" class="tmon" style="z-index:2;position:absolute;width:320;height:436;overflow:hidden">'+
 						'<table border="0" style="width: 300px;height: 380;margin: 15 0 0 15;table-layout: fixed;" >'+
 							'<tr>'+
 								'<td><div id="t1" class="non"></div></td>'+
@@ -960,33 +945,23 @@
 								'<td><div id="t12" class="non"></div></td>'+
 							'</tr>'+
 						'</table>'+
-						'<br>'+
-						'<table border="0" style="width:100%;background-color: rgba(0, 0, 0, 0.4);table-layout: fixed;">'+
-							'<col width="15%">'+
-							'<col width="40%">'+
-							'<col width="45%">'+
-							'<tr>'+
-								'<td>'+
-									'<div></div>'+
-									'<div> '+
-										'<div  style="text-align:center;font-size:15px;">Time</div>'+
-										'<div style="text-align:center;font-size:35px;" id="time">60</div>'+
-									'</div>'+
-								'</td>'+
-								'<td>'+
-									'<div  style="text-align:center;font-size:15px;">Combo</div>'+
-									'<div style="text-align:center;font-size:35px;" id="combo">0</div>'+
-								'</td>'+
-								'<td>'+
-									'<div  style="text-align:center;font-size:15px;">Totol Score</div>'+
-									'<div style="text-align:center;font-size:35px;" id="point">0</div>'+
-								'</td>'+
-							'</tr>'+
-						'</table>'+
 					'</div>'
 				)
+				$('#lhead').html(
+					'<div id="time">Time<br>60</div>'
+				)
+				$('#mhead').html(
+					'<div id="combo">Combo : 0</div>'
+				)
+				$('#rhead').html(
+					'<div id="point">Score<br>0</div>'
+				)
+
 				$('body').trigger('create')
 				$(document).ready(function(){
+					$(function() {
+					    FastClick.attach(document.body);
+					});
 					var status =[1,1,1,1,1,1,1,1,1,1,1,1];
 					clock = 60;
 					$point=0;
@@ -1002,53 +977,66 @@
 					showdoc()
 					plustime()
 
-					$('.tmon').on('click', '.mon1', function() {
+					$('.tmon').on('touchstart', '.mon1', function() {
 						$(this).addClass('boom1');
 						$(this).removeClass('mon1');
-						$('#point').html($point+=100);
+						$point+=100
+						$('#point').html("Score<br>"+$point);
 						if($combo2==0 && $combo3==0 && $combo4== 0){
 							$combo1++
 							console.log($combo1)
-							$('#combo').html("A"+ $combo1);}
+							$('#combo').html("Combo : A"+ $combo1);
+							show_combo('A'+$combo1)
+						}
 					})
 
-					$('.tmon').on('click', '.mon2', function() {
+					$('.tmon').on('touchstart', '.mon2', function() {
 						$(this).addClass('boom2');
 						$(this).removeClass('mon2');
-						$('#point').html($point+=150)
+						$point+=150
+						$('#point').html("Score<br>"+$point)
 						if($combo1==0 && $combo3==0 && $combo4== 0){
 							$combo2++
 							console.log($combo2)
-							$('#combo').html("B"+$combo2);}
+							$('#combo').html("Combo : B"+$combo2);
+							show_combo('B'+$combo2)
+						}
 					})
 
-					$('.tmon').on('click', '.mon3', function() {
+					$('.tmon').on('touchstart', '.mon3', function() {
 						$(this).addClass('boom3');
 						$(this).removeClass('mon3');
-						$('#point').html($point+=200)
+						$point+=200;
+						$('#point').html("Score<br>"+$point)
 						if($combo2==0 && $combo1==0 && $combo4== 0){
 							$combo3++
 							console.log($combo3)
-							$('#combo').html("C"+$combo3);}
+							$('#combo').html("Combo : C"+$combo3);
+							show_combo('C'+$combo3)
+						}
 					})
 
-					$('.tmon').on('click', '.mon4', function() {
+					$('.tmon').on('touchstart', '.mon4', function() {
 						$(this).addClass('boom4');
 						$(this).removeClass('mon4');
-						$('#point').html($point+=1000)
+						$point+=1000
+						$('#point').html("Score<br>"+$point)
 						if($combo2==0 && $combo3==0 && $combo1== 0){
 							$combo4++
 							console.log($combo4)
-							$('#combo').html("D"+$combo4);}
+							$('#combo').html("Combo : D"+$combo4);
+							show_combo('D'+$combo4)
+						}
 					})
 
-					$('.tmon').on('click', '.timer', function() {
+					$('.tmon').on('touchstart', '.timer', function() {
 						$(this).addClass('plus3');
 						$(this).removeClass('timer');
-						$("#time").html(clock+=3)
+						clock+=3
+						$("#time").html("Time<br>"+clock)
 					})
 
-					$('.tmon').on('click', '.doc', function() {
+					$('.tmon').on('touchstart', '.doc', function() {
 						$(this).addClass('docomg');
 						$(this).removeClass('doc');
 						//$('#point').html($point-=1000)
@@ -1056,7 +1044,8 @@
 						if($combo2>0)$point=pcombo($combo2,150,$point),$combo2=0
 						if($combo3>0)$point=pcombo($combo3,200,$point),$combo3=0
 						if($combo4>0)$point=pcombo($combo4,500,$point),$combo4=0
-						$('#combo').html('Get')
+						$('#combo').html('Combo : Get')
+						show_combo('Break')
 					})
 				});
 				console.log('play mini game finish')
@@ -1065,20 +1054,20 @@
 			function show_score(sc){
 				var g = Math.ceil(parseInt(sc,10)/((Math.random()*4000)+1000))
 				$('#btl').html(
-					'<div style="width:320;height:524;background-image:url(\'bg/sel.png\');position:absolute;text-align:center;overflow:hidden">'+
-						'<br><br>'+
+					'<div style="width:320;height:436;background-image:url(\'bg/sel.png\');position:absolute;text-align:center;overflow:hidden">'+
+						'<br>'+
 						'<div>'+
 							'<h1>Your score is</h1>'+
 							'<div style="background-image:url(\'bg/white.png\')"><h2>'+sc+' point.</h2></div>'+
 						'</div>'+
-						'<br><br>'+
+						'<br>'+
 						'<div>'+
 							'<h1>You got</h1>'+
 							'<div style="background-image:url(\'bg/white.png\')"><h2>'+g+' G</h2></div>'+
 						'</div>'+
-						'<br><br>'+
+						'<br>'+
 						'<div>'+
-							'<a href="#" onclick="calculate('+g+')"><img src=images/Buttonback.png style="width:150px"></a>'+
+							'<a href="#" onclick="calculate('+g+')"><img src=images/Buttonback.png style="width:100px"></a>'+
 						'</div>'+
 					'</div>'
 				)
@@ -1100,6 +1089,13 @@
 				console.log("calculate finish")
 			}
 
+			function show_combo(str){
+				$('#showcombo').html('<div id='+str+'><h1>'+str+'</h1></div>')
+				$('#'+str).fadeOut(500,function(){
+					$('#showcombo').html('')
+				})
+			}
+
 			function pcombo(combo,p,point){
 				if(combo<5) point=point+combo*p*1.25
 				if(combo<10)point=point+combo*p*1.5
@@ -1109,7 +1105,7 @@
 				if(combo<30)point=point+combo*p*2.5
 				if(combo<35)point=point+combo*p*2.75
 				if(combo>35)point=point+combo*p*3
-				$('#point').html(point)
+				$('#point').html("Score<br>"+point)
 				return point
 			}
 
@@ -1117,14 +1113,15 @@
 				clock--
 				if(clock>=0){
 					setTimeout(timecount,1000)
-				$('#time').html(clock)
+				$('#time').html("Time<br>"+clock)
 				}else{
 					if($combo1>0)$point=pcombo($combo1,100,$point)
 					if($combo2>0)$point=pcombo($combo2,150,$point)
 					if($combo3>0)$point=pcombo($combo3,200,$point)
 					if($combo4>0)$point=pcombo($combo4,500,$point)
-					$('#combo').html('Get')
+					$('#combo').html('Combo : Get')
 					setTimeout(function(){show_score($point)},3000)
+					show_combo('Get')
 				}
 			}
 
@@ -1237,9 +1234,9 @@
 	<!-- Header ..............................................................................................-->
 
 
-	<div data-theme="a" class="my-page" style='position:relative;z-index:5' >
+	<div data-theme="a" class="my-page" style='position:relative;z-index:5;height:44px'>
 		<div data-role="header">
-			<div class="ui-btn-right" id="rhead"></div>
+			<div class="ui-btn-right" id="rhead" style="text-align:right"></div>
 			<span class="ui-title" id="mhead">Friend Lab</span>
 			<div class="ui-btn-left" id="lhead"></div>
 		</div>
@@ -1249,11 +1246,11 @@
 	<!-- Content .............................................................................................-->
 
 
-	<div id="content" style='position:relative;z-index:0;width:320px;height:524px;background-image:url(bg/lab1x.jpg);background-size:cover;background-position:bottom;'>
+	<div id="content" style='position:relative;z-index:0;width:320px;height:416px;background-image:url(bg/lab1x.jpg);background-size:cover;background-position:bottom;overflow:hidden'>
 	<!-- ..... status bar layer ......................................................................... -->
 		<div id="stl" style='position:absolute;z-index:5'>
-			<img src="GRAPHIC/logoapp.png" style="width:360;height:240;margin:40 -20">
-			<a href"#" onclick="FB.login(function(){},{scope:'read_friendlists'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:0 55"></a>
+			<img src="GRAPHIC/logoapp.png" style="width:260;height:180;margin:5 30">
+			<a href"#" onclick="FB.login(function(){},{scope:'read_friendlists'})"><img src="GRAPHIC/facebook.png" style="width:210;height:70;margin:60 55"></a>
 		</div>
 		<!-- ..... button layer ............................................................................. -->
 		<div id="btl" style='position:absolute;z-index:4'></div>

@@ -118,7 +118,29 @@
 
 	$app->post('/:id/capture',function($id) use($app){
 		$im = imagegrabscreen();
-		imagepng($im,"xxx.png");
+		imagepng($im,"/share_image/"$id+".png");
+		$url = "http://app.socialhappen.com/friendlab/share_image/"+$id+".png"
+
+		$app_id = "405891112842517";
+		$app_secret = "433a6313167f3ec12db2f9b87e693566";
+
+		$code = $_REQUEST["code"];
+
+		//Obtain the access_token with publish_stream permission
+		if(empty($code)){
+			$dialog_url= "http://www.facebook.com/dialog/oauth?" . "client_id=" . $app_id . "&redirect_uri=" . urlencode( $post_login_url) . "&scope=publish_stream";
+			echo("<script>top.location.href='" . $dialog_url . "'</script>");
+		}else{
+			$token_url="https://graph.facebook.com/oauth/access_token?" . "client_id=" . $app_id . "&redirect_uri=" . urlencode( $post_login_url) . "&client_secret=" . $app_secret . "&code=" . $code;
+			$response = file_get_contents($token_url);
+			$params = null;
+			parse_str($response, $params);
+			$access_token = $params['access_token'];
+
+			// Show photo upload form to user and post to the Graph URL
+			$graph_url= "https://graph.facebook.com/"+$id+"/photos?" . "url=" . urlencode($url) . "&method=POST" . "&access_token=" .$access_token;
+
+		}
 		imagedestroy($im);
 	});
 
